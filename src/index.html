@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Left Side Menu with CSS Animation</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+
+<div id="menu">
+    <ul>
+        <li onclick="showIframe('none')">Schedule</li>
+        <li onclick="showIframe('standings')">Standings</li>
+        <li onclick="showIframe('leaders')">League Leaders</li>
+        <li onclick="showIframe('pp100')">Advanced</li>
+        <li onclick="showIframe('depths')">Depth Charts</li>
+    </ul>
+</div>
+
+<div id="menu-toggle" onclick="toggleMenu()">&#9776; <strong>Menu</strong></div>
+<iframe id="iframeScheduleID"class ="iframeSchedule" src="views/schedule.html"></iframe>
+
+
+<iframe id="blank" class="iframe_blank" src="views/blank.html"></iframe>
+<iframe id="standings" class="iframeID" src="views/standings.html"></iframe>
+<iframe id="leaders" class="iframeID" src="views/leagueleaders.html"></iframe>
+<iframe id="pp100" class="iframeID" src="views/pp100.html"></iframe>
+<iframe id="depths" class="iframeID" src="views/depthcharts.html"></iframe>
+
+
+<script>
+  function showIframe(id) {
+      // Hide all iframes
+      var iframes = document.querySelectorAll('.iframeID');
+      var iframeToShow = document.getElementById(id);
+      iframes.forEach(function (iframe) {
+        if(iframe !== iframeToShow){
+          iframe.style.opacity = 0; // Fade out
+          // iframe.style.display = 'none';
+      }
+      });
+
+      if (id !== "none") {
+
+        var blank = document.querySelectorAll('.blank');
+          blank.forEach(function (elem) {
+              elem.style.opacity = 1;
+              elem.style.display = 'block';
+          });
+
+          // Show the selected iframe
+          
+          if (iframeToShow) {
+
+                var blankIframe = document.getElementById('blank');
+                 if (blankIframe) {
+                 blankIframe.style.display = 'block';
+                 setTimeout(function () {
+                   blankIframe.style.opacity = 1; // Fade in
+                  }, 100);
+                 }
+
+              iframeToShow.style.display = 'block';
+              setTimeout(function () {
+                  iframeToShow.style.opacity = 1; // Fade in
+              }, 50);
+          }
+      } else {
+                var blankIframe = document.getElementById('blank');
+                 if (blankIframe) {
+                 blankIframe.style.display = 'none';
+                 blankIframe.style.opacity = 0; // Fade in
+                 }
+          
+      }
+  }
+</script>
+
+
+<script>
+    const menuToggle = document.getElementById('menu-toggle');
+    const menu = document.getElementById('menu');
+
+    menuToggle.addEventListener('click', function() {
+        menu.classList.toggle('visible');
+    });
+</script>
+
+<style>
+  .teams{
+    margin-top: 50px;
+  }
+  table {
+    margin-top: 50px;
+      width: 100%;
+      border-collapse: collapse;
+  }
+
+  td {
+      width: 10%;
+      padding: 10px;
+      text-align: center;
+      vertical-align: middle;
+  }
+
+  img {
+      max-width: 100%;
+      max-height: 60px; /* Adjust the maximum height as needed */
+      display: block;
+      margin: 0 auto; /* Center the image horizontally */
+  }
+</style>
+
+
+
+
+
+<script src="main.js"></script>
+
+</body>
+</html>
+
+
+
