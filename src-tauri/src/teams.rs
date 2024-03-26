@@ -6,13 +6,14 @@ pub struct NHLTeam {
     pub logo: &'static str,
 }
 
-pub fn get_logo_by_id(id: &str) -> Option<&str> {
+pub fn get_logo_by_id(id: String) -> String {
     for team in NHL_TEAMS {
         if team.id == id {
-            return Some(&team.logo);
+            return team.logo.to_string();
         }
     }
-    None
+    // If no matching ID is found, return a default or placeholder string
+    String::from("none") // Change this to whatever default logo you prefer
 }
 
 // #[tauri::command]
