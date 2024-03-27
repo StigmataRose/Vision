@@ -1,15 +1,8 @@
 
 const invoke = window.__TAURI__.invoke
 window.onload = () => {
-  fetchSchedule(); // Call fetchStruct function when window loads
+  //fetchSchedule(); // Call fetchStruct function when window loads
 };
-
-// Assuming this code is inside an async function
-function fetchSchedule() {
-  invoke('build_schedule_struct')
-  .then((message) => console.log(message.games[0].time))
-  .catch((error) => console.error(error))
-}
 
 // Get all the team buttons
 var teamButtons = document.querySelectorAll(".team-button");
@@ -65,3 +58,274 @@ async function getTeamLogoByIndex(index) {
     console.error('Error while getting team logo:', error);
   }
 }
+
+
+// Create a 3x3 table
+function createTable(index) {
+  var table = document.createElement('table');
+  table.id = 'gameTable';
+
+  var tbody = document.createElement('tbody');
+  table.appendChild(tbody);
+
+  for (var i = 0; i < 3; i++) {
+      var row = document.createElement('tr');
+
+      for (var j = 0; j < 3; j++) {
+          var cell = document.createElement('td');
+          var cellNum = (i * 3) + (j + 1);
+
+          cell.className = 'box' + cellNum;
+          row.appendChild(cell);
+
+          if (cellNum === 1) {
+              cell.style.textAlign = "left";
+              cell.textContent = scheduled.games[index].time;
+              //console.log(game.time); // Output game.time to the console
+          }
+          if (cellNum === 3) {
+              cell.style.textAlign = "right";
+              cell.textContent = scheduled.games[index].network;
+          }
+          if (cellNum === 4) {
+              cell.style.textAlign = "center";
+              cell.appendChild(createTeamInfoDiv('HOME',scheduled.games[index].home_team));
+          }
+          if (cellNum === 5) {
+              cell.style.textAlign = "center";
+              cell.textContent = "vs";
+          }
+          if (cellNum === 6) {
+              cell.style.textAlign = "center";
+              cell.appendChild(createTeamInfoDiv('AWAY',scheduled.games[index].away_team));
+          }
+          if (cellNum === 7) {
+              cell.style.textAlign = "center";
+              cell.textContent = String(scheduled.games[index].home_team.points);
+          }
+          if (cellNum === 8) {
+            cell.style.textAlign = "center";
+            cell.textContent = "Season Points" ;
+        }
+          if (cellNum === 9) {
+              cell.style.textAlign = "center";
+              cell.textContent = String(scheduled.games[index].away_team.points);
+          }
+      }
+
+      tbody.appendChild(row);
+  }
+
+  return table;
+}
+
+function createTeamInfoDiv(team_name, the_team) {
+  var teamInfoDiv = document.createElement('div');
+  teamInfoDiv.className = 'team-info';
+
+  var teamNameDiv = document.createElement('div');
+  teamNameDiv.className = 'team-name';
+  teamNameDiv.textContent = the_team.name;
+
+  var innerDiv = createInnerContent(the_team);
+  innerDiv.className = 'inner';
+
+  var recordDiv = document.createElement('div');
+  recordDiv.className = 'record';
+  recordDiv.textContent = String(the_team.wins) + "- " + String(the_team.losses);
+
+  teamInfoDiv.appendChild(teamNameDiv);
+  teamInfoDiv.appendChild(innerDiv);
+  teamInfoDiv.appendChild(recordDiv);
+
+  return teamInfoDiv;
+}
+
+function createInnerContent(the_team) {
+  var innerDiv = document.createElement('div');
+  innerDiv.className = 'inner';
+  innerDiv.style.display = 'inline-block';
+  innerDiv.style.margin = 'auto';
+
+  var divisionColumn = document.createElement('div');
+  divisionColumn.className = 'division';
+  divisionColumn.textContent = the_team.division;
+
+  var logoColumn = document.createElement('div');
+  logoColumn.className = 'logo';
+  var logoImg = document.createElement('img');
+  logoImg.src = "../" + the_team.logo;
+  logoImg.style.height = '100px';
+  logoColumn.appendChild(logoImg);
+
+  var conferenceColumn = document.createElement('div');
+  conferenceColumn.className = 'conference';
+  conferenceColumn.textContent = the_team.conference;
+
+  var table = document.createElement('table');
+  var row = table.insertRow(0);
+
+  for (var i = 0; i < 3; i++) {
+      var cell = row.insertCell(i);
+      
+      if (i === 0) {
+        cell.textContent = String(the_team.division_rank);
+          cell.appendChild(divisionColumn);
+      }
+      if (i === 1) {
+        cell.textContent = String(the_team.name);
+          cell.appendChild(logoColumn);
+      }
+      if (i === 2) {
+        cell.textContent = String(the_team.conference_rank);
+          cell.appendChild(conferenceColumn);
+      }
+  }
+
+  innerDiv.appendChild(table);
+
+  return innerDiv;
+}
+
+var scheduled;
+
+async function fetchSchedule() {
+  try {
+    console.log("called");
+  invoke('build_schedule_struct')
+    .then((schedule) => {
+      console.log("in the structure");
+      scheduled = schedule;
+      // Call a function or perform logic here that requires big
+      performLogic();
+    })
+    .catch((error) => console.error(error));
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+var globalElement = document.createElement('div');
+
+// Optionally, set attributes or properties for the element
+globalElement.id = 'myGlobalElement';
+globalElement.textContent = 'This is my global element';
+
+// You can also set styles if needed
+globalElement.style.color = 'blue';
+globalElement.style.fontSize = '18px';
+
+function performLogic() {
+  if (scheduled) {
+    console.log("outside of scope");
+
+    var parentDiv = document.getElementById('schedule_games'); // Declaring parentDiv variable
+
+    parentDiv.appendChild(createTableWithRows());
+  
+  }
+}
+
+// Call the fetchSchedule function
+//fetchSchedule();
+
+
+document.addEventListener('DOMContentLoaded', function() {
+  try {
+   // console.log(scheduled.games.length);
+    
+} catch (error) {
+   //console.error('An error occurred:', error);
+}
+});
+
+// Time -- .time
+// networks .
+// Home Name .home_team.name
+// Home Division .home_team.Division
+// Home Rank .home_team.Rank
+// Home Conference .home_team.Conference
+// Home Conference Rank .home_team.Rank
+// Wins .home_team.wins
+// Losses .home_team.losses
+// Points . .home_team.Points
+
+function createTableWithRows() {
+  // Create a table element
+  let table = document.createElement('table');
+
+  let size = scheduled.games.length;
+  if(scheduled){
+    console.log("pass");
+  }
+console.log("Size of scheduled.games:", size);
+
+  // scheduled.games.forEach(game => {
+  //   let row = table.insertRow();
+  //   //row.appendChild(createTable(game));
+  //   // scheduleGamesDiv.style.width = '100%';
+  //   row.textContent = "game.time";
+  //   row.style.border = '1px solid black';
+  //   row.style.textAlign = 'center';
+
+  // });
+  //Create rows and cells
+  for (let i = 0; i < size; i++) {
+      let row = table.insertRow();
+      row.appendChild(createTable(i));
+      // scheduleGamesDiv.style.width = '100%';
+      row.style.border = '1px solid black';
+      row.style.textAlign = 'center';
+  }
+
+//   for (let i = 0; i < size; i++) {
+//     let row = table.insertRow();
+//     let cell = row.insertCell();
+//     let div = document.createElement('table');
+//     div.textContent = "Your text here"; // Replace "Your text here" with your desired text
+//     cell.appendChild(div);
+//     row.style.border = '1px solid black';
+//     row.style.textAlign = 'center';
+// }
+
+  return table;
+}
+
+
+
+
+function fillTables() {
+
+
+  var parentDiv = document.getElementById('schedule_games'); // Declaring parentDiv variable
+  // Create a new div element
+
+  
+  // Set attributes or properties for the new div if needed
+ let table = 
+  
+  // Append the new div to the parent div
+  //parentDiv.appendChild(createTableWithRows());
+  parentDiv.appendChild(globalElement);
+}
+
+function myFunction() {
+console.log('myFunction');
+
+  invoke('return_divisions').then((divisions) => {
+   
+    
+      console.log(String(divisions.central[0].teamName.default));
+      // Now you can work with central, pacific, atlantic, and metropolitan vectors
+      // Example: console.log(central);
+    
+   // console.log(String(divisions.central.conferenceAbbrev));
+    // Now you can work with central, pacific, atlantic, and metropolitan vectors
+    // Example: console.log(central);
+}).catch(error => {
+    // Handle error here
+    console.error(error);
+});
+ 
+}
+

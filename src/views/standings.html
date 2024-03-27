@@ -11,13 +11,143 @@
     padding: 0; /* Remove default body padding */
   }
 </style>
+<link rel="stylesheet" href="../styles.css">
 </head>
 <body>
-
-<div class="content">
-  <h1>Standings</h1>
-  <p>This is a basic HTML template with a blue background.</p>
+  <div class="video-container">
+    <video autoplay loop muted>
+        <source src="../assets/nhllogo.mp4" type="video/mp4">
+    </video>
 </div>
 
+<div class="section-title">
+       
+</div>
+
+
+<style>
+    .schedule_games {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+</style>
+
+<div id="schedule_games"></div>
+
+<!-- <button onclick="myFunction()">Click me</button> -->
+
+
+<div id="standings"></div>
+  
+
+
+<div id="league_chart"></div>
+
+<div id="league_wins_losses" style="height: 250px;" style="width: 100%;">
+<!-- The chart will be populated here -->
+<canvas id="league_wins_losses_chart" width="100%" height="200"></canvas>
+
+
+</div>
+
+<div id="home_chart"></div>
+
+<div id="home_wins_losses" style="height: 250px;" style="width: 100%;">
+<!-- The chart will be populated here -->
+<canvas id="home_wins_losses_chart" width="100%" height="200"></canvas>
+
+
+</div>
+
+</div>
+
+<div id="away_chart"></div>
+
+<div id="away_wins_losses" style="height: 250px;" style="width: 100%;">
+<!-- The chart will be populated here -->
+<canvas id="away_wins_losses_chart" width="100%" height="200"></canvas>
+
+
+</div>
+
+
+<div id="differ_chart" style="width: 100%;"></div>
+
+<div id="differ_wins_losses" style="height: 250px;" style="width: 100%;">
+<!-- The chart will be populated here -->
+<canvas id="differ_wins_losses_chart" width="100%" height="200"></canvas>
+
+
+</div>
+
+
+<style>
+#league_wins_losses {
+/* border: 1px solid #000000; */
+position: relative; /* Ensure the parent is positioned relative */
+width: 90%; 
+left: 5%;
+}
+
+#league_wins_losses_chart {
+position: absolute; /* Position the chart absolutely */
+top: 50%; /* Place the top of the chart at the vertical center */
+left: 50%; /* Place the left side of the chart at the horizontal center */
+transform: translate(-50%, -50%); /* Center the chart perfectly */
+}
+
+#home_wins_losses {
+/* border: 1px solid #000000; */
+position: relative; /* Ensure the parent is positioned relative */
+width: 90%; 
+left: 5%;
+}
+
+#home_wins_losses_chart {
+position: absolute; /* Position the chart absolutely */
+top: 50%; /* Place the top of the chart at the vertical center */
+left: 50%; /* Place the left side of the chart at the horizontal center */
+transform: translate(-50%, -50%); /* Center the chart perfectly */
+
+}
+
+#away_wins_losses {
+/* border: 1px solid #000000; */
+position: relative; /* Ensure the parent is positioned relative */
+width: 90%; 
+left: 5%;
+}
+
+#away_wins_losses_chart {
+position: absolute; /* Position the chart absolutely */
+top: 50%; /* Place the top of the chart at the vertical center */
+left: 50%; /* Place the left side of the chart at the horizontal center */
+transform: translate(-50%, -50%); /* Center the chart perfectly */
+
+}
+
+#differ_wins_losses {
+/* border: 1px solid #000000; */
+position: relative; /* Ensure the parent is positioned relative */
+width: 90%; 
+left: 5%;
+}
+
+#differ_wins_losses_chart {
+position: absolute; /* Position the chart absolutely */
+top: 50%; /* Place the top of the chart at the vertical center */
+left: 50%; /* Place the left side of the chart at the horizontal center */
+transform: translate(-50%, -50%); /* Center the chart perfectly */
+width: 500px;
+
+display: inline-block;
+    position: relative;
+
+}
+</style>
+
+<script src="../chart.js"></script>
+<script src="scripts/standings.js"></script>
 </body>
 </html>

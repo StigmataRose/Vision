@@ -121,6 +121,7 @@ pub fn get_nhl_schedule() -> Result<(), reqwest::Error> {
             let game_data: GameData = serde_json::from_str(&body).unwrap();
             Ok(Some(game_data))
         } else {
+            println!("error");
             Ok(None)
         }
     }

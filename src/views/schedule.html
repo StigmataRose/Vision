@@ -21,171 +21,27 @@
     </div>
     
     <div class="section-title">
-        SCHEDULE
+       
     </div>
 
-    <table class="game" id="gameTable">
-        <tbody>
-        </tbody>
-    </table>
-    
+  
     <style>
-        .game {
-            border-collapse: collapse;
-            width: 100%;
-        }
-    
-        .game td {
-            border: 1px solid black;
-            text-align: center;
-            padding: 10px;
-        }
-        .box1 {
-            text-align: left;
+        .schedule_games {
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
     </style>
 
-<div class="schedule_games"></div>
-    <script>
-        // Create a 3x3 table
-        function createTable() {
-            var table = document.getElementById('gameTable');
-            var tbody = table.getElementsByTagName('tbody')[0];
-    
-            // Clear existing table if any
-            tbody.innerHTML = '';
-    
-            for (var i = 0; i < 3; i++) {
-                var row = document.createElement('tr');
-    
-                for (var j = 0; j < 3; j++) {
-                    var cell = document.createElement('td');
-                    var cellNum = (i * 3) + (j + 1);
-                    
-                    cell.className = 'box' + cellNum;
-                    row.appendChild(cell);
-
-                    if (cellNum === 1) {
-                    cell.style.textAlign = "left";
-                    cell.textContent = cellNum;
-                    }
-                    if (cellNum === 3) {
-                    cell.style.textAlign = "right";
-                    cell.textContent = cellNum;
-                    }
-                    if (cellNum === 4) {
-                    cell.style.textAlign = "center";
-                    cell.appendChild(createTeamInfoDiv('HOME'));
-                    }
-                    if (cellNum === 5) {
-                    cell.style.textAlign = "center";
-                    cell.textContent = "vs";
-                    }
-                    if (cellNum === 6) {
-                    cell.style.textAlign = "center";
-                    cell.appendChild(createTeamInfoDiv('AWAY'));
-                    }
-                    if (cellNum === 7) {
-                    cell.style.textAlign = "center";
-                    cell.textContent = cellNum;
-                    }
-                    if (cellNum === 9) {
-                    cell.style.textAlign = "center";
-                    cell.textContent = cellNum;
-                    }
-                }
-    
-                tbody.appendChild(row);
-            }
-        }
-
-    function createTeamInfoDiv(team_name) {
-    var teamInfoDiv = document.createElement('div');
-    teamInfoDiv.className = 'team-info';
-
-    var teamNameDiv = document.createElement('div');
-    teamNameDiv.className = 'team-name';
-    teamNameDiv.textContent = team_name;
-
-    var innerDiv = createInnerContent();
-    innerDiv.className = 'inner';
-    
-
-    var recordDiv = document.createElement('div');
-    recordDiv.className = 'record';
-    recordDiv.textContent = 'Record';
-
-    teamInfoDiv.appendChild(teamNameDiv);
-    teamInfoDiv.appendChild(innerDiv);
-    teamInfoDiv.appendChild(recordDiv);
-
-    return teamInfoDiv;
-}
-
-function createInnerContent() {
-
-    // Create the inner div
-    var innerDiv = document.createElement('div');
-    innerDiv.className = 'inner';
-    innerDiv.style.display = 'inline-block'; // Make the div inline-block to center it
-    innerDiv.style.margin = 'auto'; // Center the inner div horizontally
-
-      // Create the conference column
-    var divisionColumn = document.createElement('div');
-    divisionColumn.className = 'division';
-    divisionColumn.textContent = "central";
-
-    // Create the logo column
-    var logoColumn = document.createElement('div');
-    logoColumn.className = 'logo';
-    var logoImg = document.createElement('img');
-    logoImg.src = "../assets/logos/anaheim-ducks-logo.png"; // Set the URL of the logo image
-    logoImg.style.height = '100px';
-    logoColumn.appendChild(logoImg);
-
-    // Create the conference column
-    var conferenceColumn = document.createElement('div');
-    conferenceColumn.className = 'conference';
-    conferenceColumn.textContent = "east";
-
-    var table = document.createElement('table');
-    
-    // Create a row element
-    var row = table.insertRow(0);
-    
-    // Create three cells (columns) and append them to the row
-    for (var i = 0; i < 3; i++) {
-        var cell = row.insertCell(i);
-        cell.textContent = 'Column ' + (i + 1);
-        if(i === 0){
-            cell.appendChild(divisionColumn);
-        }
-        if(i === 1){
-            cell.appendChild(logoColumn);
-        }
-        if(i === 2){
-            cell.appendChild(conferenceColumn);
-        }
-    }
-    
-    // Append the table to the document body (you can append it to any other element if you want)
-    innerDiv.appendChild(table);
-
-
-  
-
-    // Return the inner div
-    return innerDiv;
-}
-
-
-    
-        var scheduleGamesDiv = document.querySelector('.schedule_games');
-scheduleGamesDiv.appendChild(createTable());
-    </script>
-    
-
-      
+<div id="schedule_games"></div>
    
+
+
+
+<!-- <script>
+    fillTables();
+</script> -->
+<script src="../chart.js"></script>
+<script src="../main.js"></script>
 </body>
 </html>
