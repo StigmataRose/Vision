@@ -113,6 +113,10 @@ body {
     opacity: 0;
     transition: opacity 0.5s ease;
   }
+  #home{
+    display: block;
+    opacity: 1;
+  }
 
 
 
@@ -136,7 +140,7 @@ body {
 }
 .team-button:active {
   transform: scale(1.4); /* Scale the button up on click */
-  transition: transform 0.2s; /* Faster transition duration */
+  transition: transform 0.15s; /* Faster transition duration */
 }
 
 ::selection {

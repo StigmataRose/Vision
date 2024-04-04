@@ -8,30 +8,34 @@
 </head>
 <body>
 
+<!-- <div class="home_page_box"><img src = "assets/logo.png" id="predators_logo"></div> -->
 
 <div id="menu">
     <ul>
-        <li onclick="showIframe('none')">Schedule</li>
+      <li onclick="showIframe('home')">Home</li>
+        <li onclick="showIframe('schedule')">Schedule</li>
         <li onclick="showIframe('standings')">Standings</li>
         <li onclick="showIframe('leaders')">League Leaders</li>
         <li onclick="showIframe('pp100')">Advanced</li>
-        <li onclick="showIframe('depths')">Depth Charts</li>
+        <li onclick="showIframe('depths')">Rosters</li>
     </ul>
 </div>
 
 <div id="menu-toggle" onclick="toggleMenu()">&#9776; <strong>Menu</strong></div>
 
-<iframe id="iframeScheduleID"class ="iframeSchedule" src="views/schedule.html"></iframe>
+<iframe id="home" class="iframeID" src="views/home.html"></iframe>
 
-
-<iframe id="blank" class="iframe_blank" src="views/blank.html"></iframe>
+<iframe id="schedule"class ="iframeID" src="views/schedule.html"></iframe>
 <iframe id="standings" class="iframeID" src="views/standings.html"></iframe>
 <iframe id="leaders" class="iframeID" src="views/leagueleaders.html"></iframe>
 <iframe id="pp100" class="iframeID" src="views/pp100.html"></iframe>
-<iframe id="depths" class="iframeID" src="views/depthcharts.html"></iframe>
+<iframe id="depths" class="iframeID" src="views/team_rosters.html"></iframe>
 
 
 <script>
+
+
+
   function showIframe(id) {
       // Hide all iframes
       var iframes = document.querySelectorAll('.iframeID');
@@ -39,43 +43,14 @@
       iframes.forEach(function (iframe) {
         if(iframe !== iframeToShow){
           iframe.style.opacity = 0; // Fade out
-          // iframe.style.display = 'none';
+         iframe.style.display = 'none';
       }
       });
 
-      if (id !== "none") {
-
-        var blank = document.querySelectorAll('.blank');
-          blank.forEach(function (elem) {
-              elem.style.opacity = 1;
-              elem.style.display = 'block';
-          });
-
-          // Show the selected iframe
-          
-          if (iframeToShow) {
-
-                var blankIframe = document.getElementById('blank');
-                 if (blankIframe) {
-                 blankIframe.style.display = 'block';
-                 setTimeout(function () {
-                   blankIframe.style.opacity = 1; // Fade in
-                  }, 100);
-                 }
-
-              iframeToShow.style.display = 'block';
-              setTimeout(function () {
-                  iframeToShow.style.opacity = 1; // Fade in
-              }, 50);
-          }
-      } else {
-                var blankIframe = document.getElementById('blank');
-                 if (blankIframe) {
-                 blankIframe.style.display = 'none';
-                 blankIframe.style.opacity = 0; // Fade in
-                 }
-          
-      }
+    iframeToShow.style.display = 'block';
+    setTimeout(function () {
+        iframeToShow.style.opacity = 1; // Fade in
+      }, 50);
   }
 </script>
 
@@ -87,6 +62,34 @@
     menuToggle.addEventListener('click', function() {
         menu.classList.toggle('visible');
     });
+</script>
+
+<script>
+  // const menuToggle = document.getElementById('menu-toggle');
+  // const menu = document.getElementById('menu');
+
+  // menuToggle.addEventListener('click', function() {
+  //     menu.classList.toggle('visible');
+  // });
+
+ document.addEventListener('DOMContentLoaded', function() {
+ var id = 'depths';
+ var iframes = document.querySelectorAll('.iframeID');
+ var iframeToShow = document.getElementById(id);
+
+ iframes.forEach(function (iframe) {
+    if(iframe !== iframeToShow){
+      iframe.style.opacity = 0; // Fade out
+      iframe.style.display = 'none';
+    } else {
+      // Ensure the iframe you want to display is visible
+      setTimeout(function () {
+        iframe.style.opacity = 1; // Fade in
+      }, 5);
+      iframe.style.display = 'block';
+    }
+ });
+});
 </script>
 
 <style>
@@ -107,13 +110,13 @@
   }
 
   img {
-      max-width: 100%;
-      max-height: 60px; /* Adjust the maximum height as needed */
+    top: 100px;
+      max-width: 25%;
+       max-height: 50%; 
       display: block;
       margin: 0 auto; /* Center the image horizontally */
   }
 </style>
-
 
 
 

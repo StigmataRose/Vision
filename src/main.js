@@ -2,6 +2,7 @@
 const invoke = window.__TAURI__.invoke
 window.onload = () => {
   //fetchSchedule(); // Call fetchStruct function when window loads
+  //alert('Right Click Folders to remove notifications');
 };
 
 // Get all the team buttons
@@ -329,3 +330,10 @@ console.log('myFunction');
  
 }
 
+
+// document.addEventListener("click", function(event) {
+//   var customMenu = document.getElementById("menu");
+//   if (!customMenu.contains(event.target)) {
+//       customMenu.style.display = "none";
+//   }
+// });

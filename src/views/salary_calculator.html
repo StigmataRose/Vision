@@ -1,0 +1,87 @@
+<html ng-app="MyApp">
+
+<head>
+  <link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
+</head>
+
+<body ng-controller="AppController as App">
+  <div class="container-fluid main" id="viewport">
+    <div class="row" id="title">
+      <div class="col-sm-3">
+
+      </div>
+     
+    </div>
+    <div class="row">
+      <div class="col-sm-6">
+        <div class="row">
+          <div class="col-sm-2 heading">
+            <p>Add/Del</p>
+          </div>
+          <div class="col-sm-4 heading">
+            <p>Name</p>
+          </div>
+          <div class="col-sm-3 heading">
+            <p>Salary</p>
+          </div>
+          <div class="col-sm-3 heading">
+            <p>Type</p>
+          </div>
+        </div>
+        <div class="row players repeated-item" ng-repeat="player in players">
+          <div class="col-sm-2">
+            <button class="btn btn-danger del" ng-click="deletePlayer($index)"> x </button>
+          </div>
+          <div class="col-sm-4">
+            <input type="text" class="form-control" id="names" ng-if="player.playerStatus == 'New'" ng-model="player.playerName">
+            <span ng-if="player.playerStatus != 'New'"> {{player.playerName}}</span>
+          </div>
+          <div class="col-sm-3">
+            <input type="text" class="form-control" id="salary" ng-if="player.playerStatus != 'Guaranteed'" ng-model="player.playerSalary ">
+            <span ng-if="player.playerStatus == 'Guaranteed'"> {{player.playerSalary | currency}}</span>
+          </div>
+          <div class="col-sm-3">
+            {{player.playerStatus}}
+          </div>
+
+
+        </div>
+        <div class="row alert alert-danger andywemissyou">
+          <div class="col-sm-2">
+          </div>
+          <div class="col-sm-4">
+            Anderson Varajao
+          </div>
+          <div class="col-sm-3">
+            $1,984,005
+          </div>
+          <div class="col-sm-3">
+            Dead Money
+          </div>
+
+        </div>
+        <p>
+          <button class="btn btn-success del" ng-click="addNew()"> + </button> New Player </p>
+
+      </div>
+      <div class="col-sm-5">
+        <img src="http://stats.nba.com/media/players/700/203081.png">
+      </div>
+    </div>
+
+    <div class="row totals">
+      <div class="col-sm-2">
+
+        <button class="btn btn-primary tot" ng-click="updateTotal()"> Calculate Total</button>
+      </div>
+      <div class="col-sm-4 total">
+
+        <span><h3 ng-class="{true: 'alert alert-danger', false: 'alert alert-success'}[total >= 94000000]"> Total  {{total | currency}} </h3></span>
+        <h5> Remaining: {{remaining | currency}}</h5>
+      </div>
+      <div class="col-sm-3 tots">
+        <h3> Salary Cap: $94,000,000 </h3> <p>*roster charges added if less than 12 players</p>
+      </div>
+    </div>
+  </div>
+</body>

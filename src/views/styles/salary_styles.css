@@ -1,0 +1,63 @@
+#viewport {
+    background-color: #f4f1ee;
+  }
+  
+  #title {
+    background-color: #ff1a1a;
+    color: white;
+    margin-bottom: 10px;
+    text-shadow: 2px 2px #000000;
+    box-shadow: 0 4px 3px #888888;
+    font-family: Oswald;
+  }
+  
+  .players {
+    margin-top: 2px;
+    margin-bottom: 2px;
+  }
+  
+  .main {
+    margin-bottom: 5px;
+  }
+  
+  .totals {
+    background-color: #e7e2dd;
+    padding-top: 5px;
+     box-shadow: 0 -2px 3px #888888;
+  }
+  
+  .del {
+    border-radius: 20px;
+  }
+  
+  .andywemissyou {
+    margin-top: 3px;
+    margin-bottom: 3px;
+  }
+  
+  .heading {
+    border-bottom: thin solid #000000;
+    margin-bottom: 5px;
+  }
+  
+  .tot {
+    margin-top: 30px;  
+  }
+  .tots {
+    margin-top: 5px;  
+  }
+  .repeated-item.ng-enter, .repeated-item.ng-move {
+    transition: all 0.5s linear;
+    opacity: 0;
+  }
+  .repeated-item.ng-enter.ng-enter-active,
+  .repeated-item.ng-move.ng-move-active {
+    opacity: 1;
+  }
+  .repeated-item.ng-leave {
+    animation: 0.5s my_animation;
+  }
+  @keyframes my_animation {
+    from { opacity:1; }
+    to { opacity:0; }
+  }

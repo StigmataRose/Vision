@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blue Background Template</title>
+<style>
+  body {
+    background-color: rgb(255, 255, 255);
+    color: white; /* Set text color to white for better contrast */
+    font-family: Arial, sans-serif; /* Use Arial font */
+    margin: 0; /* Remove default body margin */
+    padding: 0; /* Remove default body padding */
+  }
+
+  /* Style the content area */
+  .content {
+    padding: 20px; /* Add padding to content area */
+    text-align: center; /* Center-align content */
+  }
+</style>
+
+<link rel="stylesheet" href="../styles.css">
+<script src="../chart.js"></script>
+</head>
+<body>
+
+
+  <style>
+
+:root {
+            --main-color: #FFB81C; /* Default color */
+            --second-color: #FFB81C; 
+        }
+
+    .teams{
+      margin-top: 50px;
+    }
+    table {
+      margin-top: 50px;
+        width: 100%;
+        border-collapse: collapse;
+    }
+  
+    td {
+        width: 10%;
+        
+        text-align: center;
+        vertical-align: middle;
+    }
+  
+    img {
+        max-width: 100%;
+        max-height: 60px; /* Adjust the maximum height as needed */
+        display: block;
+        margin: 0 auto; /* Center the image horizontally */
+    }
+
+    #forwardTableContainer {
+    width: 90%; /* Set width to 90% */
+    margin: 0 auto; /* Center horizontally */
+}
+
+#title_box {
+    padding: 10px;
+    background-color: #f0f0f0; /* Background color */
+   
+    text-align: center;
+    font-size: 20px;
+    font-weight: bold;
+    color: black; /* Text color */
+    width: fit-content; /* Adjust the width based on content */
+    margin: 20px auto; /* Center the box horizontally */
+  }
+
+  .forwardChartStyle {
+    width: 90%;
+    height: 264px;
+    margin: 0 auto; /* This centers the element horizontally */
+    padding-top: 10px;
+    padding-bottom: 50px;
+}
+
+#totalChart_Parent {
+    height: 264px;
+    /* Add any other styles here */
+}
+
+#totalChart {
+  
+  position: absolute;;
+    width: 100%;
+    height: 100%;
+}
+
+
+.section-title {
+max-width: 800px;
+margin: 10px auto;
+padding: 15px;
+text-align: center; }
+.section-title h1 {
+font-size: 24px;
+text-transform: uppercase;
+color: var(--main-color); 
+text-shadow: 
+      -1px -1px 0 var(--second-color),  
+       1px -1px 0 var(--second-color),
+      -1px  1px 0 var(--second-color),
+       1px  1px 0 var(--second-color),
+       2px 2px 4px rgba(0, 0, 0, 0.2), /* Adjust the values for desired shadow effect */
+  -2px -2px 4px rgba(0, 0, 0, 0.2);
+  
+}
+.section-title .divider {
+position: relative;
+border-bottom: 1px solid #f0f0f0;
+margin-bottom: 10px;
+margin-top: 30px; 
+border-radius: 50%;}
+.section-title .divider:before {
+position: absolute;
+content: '';
+width: 30px;
+height: 30px;
+border-radius: 50%;
+border: 1px solid #f0f0f0;
+left: 50%;
+margin-left: -15px;
+top: 50%;
+background: #fff;
+margin-top: -15px;
+-webkit-transform: rotate(45deg);
+-moz-transform: rotate(45deg);
+-ms-transform: rotate(45deg);
+transform: rotate(45deg); }
+.section-title .divider:after {
+position: absolute;
+content: '';
+width: 20px;
+height: 20px;
+border-radius: 50%;
+border: 1px solid var(--main-color);
+left: 50%;
+margin-left: -10px;
+top: 50%;
+background: var(--main-color);
+
+box-shadow: 
+      -1px -1px 0 var(--second-color),  
+       1px -1px 0 var(--second-color),
+      -1px  1px 0 var(--second-color),
+       1px  1px 0 var(--second-color),
+       2px 2px 4px rgba(0, 0, 0, 0.2), /* Adjust the values for desired shadow effect */
+  -2px -2px 4px rgba(0, 0, 0, 0.2);
+
+margin-top: -10px;
+-webkit-transform: rotate(45deg);
+-moz-transform: rotate(45deg);
+-ms-transform: rotate(45deg);
+transform: rotate(45deg); }
+
+.selected-cell {
+  opacity: 1; /* Start with full opacity */
+  animation: pulsing 1s infinite alternate ease-in-out;
+}
+
+.selected-cell.hidden {
+  opacity: 0; /* Hide the element with opacity */
+}
+
+@keyframes pulsing {
+    0% {
+        transform: scale(1.4);
+    }
+    100% {
+        transform: scale(1.0);
+    }
+}
+
+
+  </style>
+  
+  <table id="teams">
+    <tr>
+      <td><button id="team1" class="team-button"><img class="team_logo" src="../assets/logos/anaheim-ducks-logo.png" alt="Anaheim Ducks"></button></td>
+      <td><button id="team2" class="team-button"><img class="team_logo" src="../assets/logos/arizona-coyotes-logo.png" alt="Arizona Coyotes"></button></td>
+      <td><button id="team3" class="team-button"><img class="team_logo" src="../assets/logos/boston-bruins-logo.png" alt="Boston Bruins"></button></td>
+      <td><button id="team4" class="team-button"><img class="team_logo" src="../assets/logos/buffalo-sabres-logo.png" alt="Buffalo Sabres"></button></td>
+      <td><button id="team5" class="team-button"><img class="team_logo" src="../assets/logos/calgary-flames-logo.png" alt="Calgary Flames"></button></td>
+      <td><button id="team6" class="team-button"><img class="team_logo" src="../assets/logos/carolina-hurricanes-logo.png" alt="Carolina Hurricanes"></button></td>
+      <td><button id="team7" class="team-button"><img class="team_logo" src="../assets/logos/chicago-blackhawks-logo.png" alt="Chicago Blackhawks"></button></td>
+      <td><button id="team8" class="team-button"><img class="team_logo" src="../assets/logos/colorado-avalanche-logo.png" alt="Colorado Avalanche"></button></td>
+    </tr>
+    <tr>
+      <td><button id="team9" class="team-button"><img class="team_logo" src="../assets/logos/columbus-blue-jackets-logo.png" alt="Columbus Blue Jackets"></button></td>
+      <td><button id="team10" class="team-button"><img class="team_logo" src="../assets/logos/dallas-stars-logo.png" alt="Dallas Stars"></button></td>
+      <td><button id="team11" class="team-button"><img class="team_logo" src="../assets/logos/detroit-red-wings-logo.png" alt="Detroit Red Wings"></button></td>
+      <td><button id="team12" class="team-button"><img class="team_logo" src="../assets/logos/edmonton-oilers-logo.png" alt="Edmonton Oilers"></button></td>
+      <td><button id="team13" class="team-button"><img class="team_logo" src="../assets/logos/florida-panthers-logo.png" alt="Florida Panthers"></button></td>
+      <td><button id="team14" class="team-button"><img class="team_logo" src="../assets/logos/los-angeles-kings-logo.png" alt="Los Angeles Kings"></button></td>
+      <td><button id="team15" class="team-button"><img class="team_logo" src="../assets/logos/minnesota-wild-logo.png" alt="Minnesota Wild"></button></td>
+      <td><button id="team16" class="team-button"><img class="team_logo" src="../assets/logos/montreal-canadiens-logo.png" alt="Montreal Canadiens"></button></td>
+    </tr>
+    <tr>
+      <td><button id="team17" class="team-button"><img class="selected-cell" class="team_logo" src="../assets/logos/nashville-predators-logo.png" alt="Nashville Predators"></button></td>
+      <td><button id="team18" class="team-button"><img class="team_logo" src="../assets/logos/new-jersey-devils-logo.png" alt="New Jersey Devils"></button></td>
+      <td><button id="team19" class="team-button"><img class="team_logo" src="../assets/logos/new-york-islanders-logo.png" alt="New York Islanders"></button></td>
+      <td><button id="team20" class="team-button"><img class="team_logo" src="../assets/logos/new-york-rangers-logo.png" alt="New York Rangers"></button></td>
+      <td><button id="team21" class="team-button"><img class="team_logo" src="../assets/logos/ottawa-senators-logo.png" alt="Ottawa Senators"></button></td>
+      <td><button id="team22" class="team-button"><img class="team_logo" src="../assets/logos/philadelphia-flyers-logo.png" alt="Philadelphia Flyers"></button></td>
+      <td><button id="team23" class="team-button"><img class="team_logo" src="../assets/logos/pittsburgh-penguins-logo.png" alt="Pittsburgh Penguins"></button></td>
+      <td><button id="team24" class="team-button"><img class="team_logo" src="../assets/logos/san-jose-sharks-logo.png" alt="San Jose Sharks"></button></td>
+    </tr>
+    <tr>
+      <td><button id="team25" class="team-button"><img class="team_logo" src="../assets/logos/seattle-kraken-logo.png" alt="Seattle Kraken"></button></td>
+      <td><button id="team26" class="team-button"><img class="team_logo" src="../assets/logos/st-louis-blues-logo.png" alt="St. Louis Blues"></button></td>
+      <td><button id="team27" class="team-button"><img class="team_logo" src="../assets/logos/tampa-bay-lightning-logo.png" alt="Tampa Bay Lightning"></button></td>
+      <td><button id="team28" class="team-button"><img class="team_logo" src="../assets/logos/toronto-maple-leafs-logo.png" alt="Toronto Maple Leafs"></button></td>
+      <td><button id="team29" class="team-button"><img class="team_logo" src="../assets/logos/vancouver-canucks-logo.png" alt="Vancouver Canucks"></button></td>
+      <td><button id="team30" class="team-button"><img class="team_logo" src="../assets/logos/vegas-golden-knights-logo.png" alt="Vegas Golden Knights"></button></td>
+      <td><button id="team31" class="team-button"><img class="team_logo" src="../assets/logos/washington-capitals-logo.png" alt="Washington Capitals"></button></td>
+      <td><button id="team32" class="team-button"><img class="team_logo" src="../assets/logos/winnipeg-jets-logo.png" alt="Winnipeg Jets"></button></td>
+    </tr>
+  </table>
+  
+  <script>
+    // Get all buttons with class "team-button"
+    const buttons = document.querySelectorAll('.team-button');
+  
+    // Iterate over each button and add a click event listener
+    buttons.forEach(button => {
+      button.addEventListener('click', () => {
+
+          // Remove the "selected-cell" class from any previously selected cell
+      const previouslySelectedCell = document.querySelector('.selected-cell');
+      if (previouslySelectedCell) {
+        previouslySelectedCell.classList.remove('selected-cell');
+      }
+
+       // Get the parent <td> of the clicked button
+        const selectedCell = button.parentNode;
+      // Add the "selected-cell" class to the selected cell
+      selectedCell.classList.add('selected-cell');
+      
+        // Extract the number after "team" from the button's ID
+        const teamNumber = parseInt(button.id.replace('team', ''));
+        // Subtract 1 from the team number
+        const adjustedTeamNumber = teamNumber - 1;
+        // Output the adjusted team number
+
+        getTeamInfo(adjustedTeamNumber);
+        //console.log('Adjusted Team number:', adjustedTeamNumber);
+        // You can perform any other actions you want with the adjusted team number here
+      });
+    });
+  </script>
+ 
+ <div class="section-title">
+  <h1 id="title">Nasvhille Predators</h1>
+  <div class="divider"></div>
+</div>
+
+
+</div>
+
+     <div id="forwardTableContainer"></div>
+
+
+     <div class="forwardChartStyle" id="totalChart_Parent"></div>
+
+     <div class="forwardChartStyle" id="forwardPointsChart_Parent"></div>
+
+     <div class="forwardChartStyle" id="forwardGoalChart_Parent"></div>
+
+     <div class="forwardChartStyle" id="forwardAssistsChart_Parent"></div>
+  
+     <div class="forwardChartStyle" id="forwardShotsChart_Parent"></div>
+
+
+ 
+
+
+
+
+<script src="scripts/team_rosters.js"></script>
+
+</body>
+</html>

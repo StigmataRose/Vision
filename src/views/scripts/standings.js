@@ -629,7 +629,7 @@ function populate_differ_chart() {
          let dif = league[i].goalDifferential;
          let perc = league[i].goalsForPctg;
 
-         console.log("Full Name:", full);
+        // console.log("Full Name:", full);
          let dataset = {
             label: common,
             data: [{ x: dif, y: perc, r: perc }],
@@ -638,10 +638,10 @@ function populate_differ_chart() {
         };
     
         // Output the values to the console
-console.log("Label:", dataset.label);
-console.log("Data:", dataset.data);
-console.log("Background Color:", dataset.backgroundColor);
-console.log("Border Color:", dataset.borderColor);
+// console.log("Label:", dataset.label);
+// console.log("Data:", dataset.data);
+// console.log("Background Color:", dataset.backgroundColor);
+// console.log("Border Color:", dataset.borderColor);
 
         // Push the dataset object into the datasets array
         datasets.push(dataset);
