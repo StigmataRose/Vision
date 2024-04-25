@@ -1,8 +1,8 @@
 # Vision
 ### Example Images
 
-![Image 1](./example/image1.jpg)
-![Image 2](./image2.jpg)
-![Image 3](./image3.jpg)
-![Image 4](./image4.jpg)
-![Image 5](./image5.jpg)
+![Image 1](./example/image1.png)
+![Image 2](./example/image2.png)
+![Image 3](./example/image3.png)
+![Image 4](./example/image4.png)
+![Image 5](./example/image5.png)
