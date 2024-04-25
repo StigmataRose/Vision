@@ -2,31 +2,31 @@
 ### Example Images
 
 <p align="left">
-  <em>Homepage: Desktop Style Drag and Drop</em>
+  <em>Desktop Style Drag and Drop for automated reports</em>
   <br />
   <img src="./example/image1.png" alt="Image 1" width="200" />
 </p>
 
 <p align="left">
-  <em>Image 2: Title of Image 2</em>
+  <em>See realtime stats of the current playoff race</em>
   <br />
   <img src="./example/image2.png" alt="Image 2" width="200" />
 </p>
 
 <p align="left">
-  <em>Image 3: Title of Image 3</em>
+  <em>Analyze team metrics, with graph control</em>
   <br />
   <img src="./example/image3.png" alt="Image 3" width="200" />
 </p>
 
 <p align="left">
-  <em>Image 4: Title of Image 4</em>
+  <em>Different ways to view data</em>
   <br />
   <img src="./example/image4.png" alt="Image 4" width="200" />
 </p>
 
 <p align="left">
-  <em>Image 5: Title of Image 5</em>
+  <em>Plot shot data for visual feedback</em>
   <br />
   <img src="./example/image5.png" alt="Image 5" width="200" />
 </p>
