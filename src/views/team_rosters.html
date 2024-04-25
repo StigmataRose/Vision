@@ -30,7 +30,7 @@
 
 :root {
             --main-color: #FFB81C; /* Default color */
-            --second-color: #FFB81C; 
+            --second-color: #041E42; 
         }
 
     .teams{
@@ -61,6 +61,16 @@
     margin: 0 auto; /* Center horizontally */
 }
 
+#defenseTableContainer {
+    width: 90%; /* Set width to 90% */
+    margin: 0 auto; /* Center horizontally */
+}
+
+#goalieTableContainer {
+    width: 90%; /* Set width to 90% */
+    margin: 0 auto; /* Center horizontally */
+}
+
 #title_box {
     padding: 10px;
     background-color: #f0f0f0; /* Background color */
@@ -81,7 +91,16 @@
     padding-bottom: 50px;
 }
 
-#totalChart_Parent {
+.defenseChartStyle {
+    width: 90%;
+    height: 264px;
+    margin: 0 auto; /* This centers the element horizontally */
+    padding-top: 10px;
+    padding-bottom: 50px;
+}
+
+
+#totalForwardChart_Parent {
     height: 264px;
     /* Add any other styles here */
 }
@@ -91,6 +110,10 @@
   position: absolute;;
     width: 100%;
     height: 100%;
+}
+
+#spacer {
+  padding-top: 10px;
 }
 
 
@@ -176,6 +199,8 @@ transform: rotate(45deg); }
     100% {
         transform: scale(1.0);
     }
+
+   
 }
 
 
@@ -264,10 +289,12 @@ transform: rotate(45deg); }
 
 </div>
 
+
+
+     
      <div id="forwardTableContainer"></div>
-
-
-     <div class="forwardChartStyle" id="totalChart_Parent"></div>
+     <div id="spacer"></div>
+     <div class="forwardChartStyle" id="totalForwardChart_Parent"></div>
 
      <div class="forwardChartStyle" id="forwardPointsChart_Parent"></div>
 
@@ -277,6 +304,18 @@ transform: rotate(45deg); }
   
      <div class="forwardChartStyle" id="forwardShotsChart_Parent"></div>
 
+
+     <div id="defenseTableContainer"></div>
+     <div id="spacer"></div>
+     <div class="defenseChartStyle" id="totaldefenseChart_Parent"></div>
+
+     <div class="defenseChartStyle" id="defensePointsChart_Parent"></div>
+
+     <div class="defenseChartStyle" id="defenseGoalChart_Parent"></div>
+
+     <div class="defenseChartStyle" id="defenseAssistsChart_Parent"></div>
+  
+     <div class="defenseChartStyle" id="defenseShotsChart_Parent"></div>
 
  
 

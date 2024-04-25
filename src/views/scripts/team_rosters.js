@@ -123,6 +123,130 @@ function createForwardTable(forwards) {
     containerDiv.appendChild(table);
 }
 
+function createDefenseTable(defensemen) {
+    // Assume there's a global variable or function 'getForwardsData' that retrieves the forwards data for a given team index
+    //var forwardsData = getForwardsData(teamIndex);
+
+   // console.log(String(forwards.length) +'forwards found after');
+
+    var defensemenData = [];
+
+    for (var i = 0; i < defensemen.length; i++) {
+        let fullName = defensemen[i].firstName.default + ' ' + defensemen[i].lastName.default;
+        let calc_age = calculateAge(defensemen[i].birthDate);
+
+        let dataset = {
+            picture: defensemen[i].headshot,
+            name: fullName,
+            age: calc_age,
+            number: defensemen[i].sweaterNumber,
+            position: defensemen[i].positionCode,
+            shoots: defensemen[i].shootsCatches
+        };
+    
+        // Output the values to the console
+        // console.log("Picture:", dataset.picture);
+        //console.log("Name:", fullName);
+        // console.log("Number:", dataset.number);
+        // console.log("Position:", dataset.position);
+        // console.log("Shoots:", dataset.shoots);
+    
+        // Push the dataset object into the forwardsData array
+        defensemenData.push(dataset);
+    }
+
+  
+    // Create table element
+    var table = document.createElement('table');
+    table.setAttribute('border', '1');
+
+    // Create table header row
+    var headerRow = document.createElement('tr');
+    headerRow.style.maxHeight = '50px'; // Set max height of the image
+    // Define column headers
+    var headers = ['Player', 'Name', 'Age','Number', 'Position', 'Shoots'];
+
+    // Create header cells
+    headers.forEach(function(headerText) {
+        var headerCell = document.createElement('th');
+        headerCell.textContent = headerText;
+        headerCell.style.color = 'black';
+        headerRow.appendChild(headerCell);
+    });
+
+    // Append header row to table
+    table.appendChild(headerRow);
+
+    // Create data row for each forward
+    defensemenData.forEach(function(defense) {
+        var dataRow = document.createElement('tr');
+        dataRow.style.maxHeight = '50px';
+        // Create cells for each attribute
+        var pictureCell = document.createElement('td');
+        var nameCell = document.createElement('td');
+        var ageCell = document.createElement('td');
+        var numberCell = document.createElement('td');
+        var positionCell = document.createElement('td');
+        var shootsCell = document.createElement('td');
+    
+        // Create an image element
+        var img = document.createElement('img');
+        img.src = defense.picture; // Set the source of the image
+        img.style.maxHeight = '50px'; // Set max height of the image
+        pictureCell.appendChild(img); // Append the image to the pictureCell
+    
+        // Assign values to other cells
+        nameCell.textContent = defense.name;
+        ageCell.textContent = defense.age;
+        numberCell.textContent = defense.number;
+        positionCell.textContent = defense.position;
+        shootsCell.textContent = defense.shoots;
+    
+        // Apply black text color
+        nameCell.style.color = 'black';
+        ageCell.style.color = 'black';
+        numberCell.style.color = 'black';
+        positionCell.style.color = 'black';
+        shootsCell.style.color = 'black';
+
+        // Set height for each cell
+        pictureCell.style.height = '50px';
+        nameCell.style.height = '50px';
+        ageCell.style.height = '50px';
+        numberCell.style.height = '50px';
+        positionCell.style.height = '50px';
+        shootsCell.style.height = '50px';
+    
+        // Append cells to data row
+        dataRow.appendChild(pictureCell);
+        dataRow.appendChild(nameCell);
+        dataRow.appendChild(ageCell);
+        dataRow.appendChild(numberCell);
+        dataRow.appendChild(positionCell);
+        dataRow.appendChild(shootsCell);
+    
+        // Append data row to table
+        table.appendChild(dataRow);
+    });
+    
+
+    // Get the container div
+    var containerDiv = document.getElementById('defenseTableContainer');
+
+    // Clear the container
+    containerDiv.innerHTML = '';
+
+    let titleF = createUnderlinedTitle("Defensemen");
+    titleF.style.fontSize = "20px";
+    titleF.style.fontWeight = "bold";
+    titleF.style.marginTop = "10px";
+    titleF.style.color = "black"; // Set font color to black
+    // Append title and table to container
+    containerDiv.appendChild(titleF);
+  
+    containerDiv.appendChild(table);
+}
+
 
 function getTeamInfo(input) {
     var datasets = [];
@@ -138,8 +262,10 @@ function getTeamInfo(input) {
 
       //
       changeTextAndColor(name,primary, secondary);
-        let forewards = roster.forwards;
-        createForwardTable(forewards);
+        let forwardsRos = roster.forwards;
+        let defensemenRos = roster.defensemen;
+        let goalieRos = roster.goalies;
+        createForwardTable(forwardsRos);
 
         let forwards = [];
         let defense = [];
@@ -176,11 +302,8 @@ function getTeamInfo(input) {
                 
             });
         
-            // Now you have forwards, defense, and goalies arrays populated
-            // console.log('Forwards:', forwards);
-            // console.log('Defense:', defense);
-            // console.log('Goalies:', goalies);
-            createTitleAndSubtitle(0, colors, "totalChart_Parent", "Games Played", "Games Played", "Time On Ice", "Plus/Minus");
+            // Forwards Data
+            createTitleAndSubtitle(0, colors, "totalForwardChart_Parent", "Games Played", "Games Played", "Time On Ice", "Plus/Minus");
             create_forwards_charts(forwards, colors);
 
             createTitleAndSubtitle(1, colors, "forwardPointsChart_Parent", "Points", "Points", "Points Per Game", "Points Per Hour");
@@ -195,9 +318,30 @@ function getTeamInfo(input) {
 
             create_assist_points_charts(forwards, colors);
 
-            createTitleAndSubtitle(4, colors, "forwardShotsChart_Parent", "Shots", "Shots","Shots Percentage", "Shots Per Hour");
+            createTitleAndSubtitle(4, colors, "forwardShotsChart_Parent", "Shots", "Shots","Shot Percentage", "Shots Per Hour");
 
             create_shot_points_charts(forwards, colors);
+            // Defensemen Data
+            createDefenseTable(defensemenRos);
+
+            createTitleAndSubtitleDefense(0, colors, "totaldefenseChart_Parent", "Games Played", "Games Played", "Time On Ice", "Plus/Minus");
+            create_defense_charts(defense, colors);
+
+            createTitleAndSubtitleDefense(1, colors, "defensePointsChart_Parent", "Points", "Points", "Points Per Game", "Points Per Hour");
+
+            create_defense_points_charts(defense, colors);
+
+            createTitleAndSubtitleDefense(2, colors, "defenseGoalChart_Parent", "Goals", "Goals", "Goals Per Game", "Goals Per Hour");
+
+            create_defense_goals_charts(defense, colors);
+
+            createTitleAndSubtitleDefense(3, colors, "defenseAssistsChart_Parent", "Assists", "Assists","Assists Per Game", "Assists Per Hour");
+
+            create_defense_assist_points_charts(defense, colors);
+
+            createTitleAndSubtitleDefense(4, colors, "defenseShotsChart_Parent", "Shots", "Shots","Shot Percentage", "Shots Per Hour");
+
+            create_defense_shot_points_charts(defense, colors);
 
         }).catch(error => {
             // Handle error here
@@ -459,7 +603,7 @@ function update_forwardsChart(chartID, colors, localIndex) {
                 };
                 
                   // Get the reference to the parent element
-                var parentElement = document.getElementById('totalChart_Parent');
+                var parentElement = document.getElementById('totalForwardChart_Parent');
                 // Check if there is an old canvas
                 var oldCanvas = document.getElementById('games_played_chart');
                 if (oldCanvas) {
@@ -468,7 +612,7 @@ function update_forwardsChart(chartID, colors, localIndex) {
                 }
                       var canvas = document.createElement('canvas');
                       canvas.id = 'games_played_chart';
-                      document.getElementById('totalChart_Parent').appendChild(canvas);
+                      document.getElementById('totalForwardChart_Parent').appendChild(canvas);
                       var ctx = canvas.getContext('2d');
                     var myChart = new Chart(
                         ctx,
@@ -550,7 +694,7 @@ function update_forwardsChart(chartID, colors, localIndex) {
                 };
                 
                   // Get the reference to the parent element
-                var parentElement = document.getElementById('totalChart_Parent');
+                var parentElement = document.getElementById('totalForwardChart_Parent');
                 // Check if there is an old canvas
                 var oldCanvas = document.getElementById('games_played_chart');
                 if (oldCanvas) {
@@ -559,7 +703,7 @@ function update_forwardsChart(chartID, colors, localIndex) {
                 }
                       var canvas = document.createElement('canvas');
                       canvas.id = 'games_played_chart';
-                      document.getElementById('totalChart_Parent').appendChild(canvas);
+                      document.getElementById('totalForwardChart_Parent').appendChild(canvas);
                       var ctx = canvas.getContext('2d');
                     var myChart = new Chart(
                         ctx,
@@ -641,7 +785,7 @@ function update_forwardsChart(chartID, colors, localIndex) {
                 };
                 
                   // Get the reference to the parent element
-                var parentElement = document.getElementById('totalChart_Parent');
+                var parentElement = document.getElementById('totalForwardChart_Parent');
                 // Check if there is an old canvas
                 var oldCanvas = document.getElementById('games_played_chart');
                 if (oldCanvas) {
@@ -650,7 +794,7 @@ function update_forwardsChart(chartID, colors, localIndex) {
                 }
                       var canvas = document.createElement('canvas');
                       canvas.id = 'games_played_chart';
-                      document.getElementById('totalChart_Parent').appendChild(canvas);
+                      document.getElementById('totalForwardChart_Parent').appendChild(canvas);
                       var ctx = canvas.getContext('2d');
                     var myChart = new Chart(
                         ctx,
@@ -668,7 +812,7 @@ function update_forwardsChart(chartID, colors, localIndex) {
         case 1: {
             switch(localIndex) {
                 case 0: {
-                    console.log(forwardPoints);
+                    //console.log(forwardPoints);
                     const sortedData = forwardPoints.sort((a, b) => b.amount - a.amount);
     
                     const namesArray = sortedData.map(obj => obj.label); // Corrected property name
@@ -1704,10 +1848,6 @@ const config = {
     }
 };
 
-
-
-
-
   // Get the reference to the parent element
 var parentElement = document.getElementById('forwardShotsChart_Parent');
 
@@ -1970,6 +2110,1713 @@ if (oldCanvas) {
 }
 
 
+function createTitleAndSubtitleDefense(chartID,colors,parentID, title, button1, button2, button3) {
+
+    let parentElem = document.getElementById(parentID);
+    while (parentElem.firstChild) {
+        parentElem.removeChild(parentElem.firstChild);
+    }
+
+    function createUnderlinedTitle1(titleText) {
+        let titleElem = document.createElement("div");
+        titleElem.innerText = titleText;
+        titleElem.id = titleText + "Defense_ID";
+        titleElem.style.textDecoration = "underline";
+        return titleElem;
+    }
+
+   
+    function createSubtitleButton(subTitleText, bold, localIndex) {
+        let subTitleElem = document.createElement("button"); // Create a button element
+        subTitleElem.innerText = subTitleText;
+        subTitleElem.style.fontSize = "14px";
+        subTitleElem.style.color = "black"; // Set font color to black
+        subTitleElem.style.border = "none"; // Remove border
+        subTitleElem.style.background = "none"; // Remove background
+        subTitleElem.style.cursor = "pointer"; // Change cursor to pointer
+        subTitleElem.id = subTitleText + "Defense-ID";
+        if (bold) {
+            subTitleElem.style.fontWeight = "bold";
+        }else{
+            subTitleElem.style.fontWeight = "normal";
+        }
+        subTitleElem.addEventListener("click", function() { // Add click event listener
+
+            document.getElementById(button1  + "Defense-ID").style.fontWeight = "normal";
+            document.getElementById(button2 + "Defense-ID").style.fontWeight = "normal";
+            document.getElementById(button3 + "Defense-ID").style.fontWeight = "normal";
+
+            document.getElementById(subTitleText + "Defense-ID").style.fontWeight = "bold";
+            document.getElementById(title + "Defense_ID").innerText = subTitleText;
+            update_defenseChart(chartID, colors, localIndex);
+
+        });
+       
+        return subTitleElem;
+    }
+
+
+    
+    let titleF = createUnderlinedTitle1(title);
+    titleF.style.fontSize = "16px";
+    titleF.style.fontWeight = "bold";
+    titleF.style.color = "black"; // Set font color to black
+    document.getElementById(parentID).appendChild(titleF);
+  
+    let subtitle1 = createSubtitleButton(button1, true, 0); // Pass true to indicate bold
+    document.getElementById(parentID).appendChild(subtitle1);
+    
+    let subtitle2 = createSubtitleButton(button2, false, 1); // Pass false for regular
+    document.getElementById(parentID).appendChild(subtitle2);
+    
+    let subtitle3 = createSubtitleButton(button3, false, 2); // Pass false for regular
+    document.getElementById(parentID).appendChild(subtitle3);
+         
+}
+
+function update_defenseChart(chartID, colors, localIndex) {
+    switch (chartID) {
+        case 0:
+            switch (localIndex) {
+                case 0:
+                   {
+                    const sortedData = defenseGames.sort((a, b) => b.amount - a.amount);
+    
+                    const namesArray = sortedData.map(obj => obj.label); // Corrected property name
+                    const amountsArray = sortedData.map(obj => obj.amount);
+                    const posArray = sortedData.map(obj => obj.position);
+                    const apgArray = sortedData.map(obj => obj.TOI);
+                    const aphArray = sortedData.map(obj => obj.PM);
+                
+                    const data = {
+                        labels: namesArray,
+                        datasets: [
+                            {
+                                label: 'Games Played',
+                                backgroundColor: colors.primary,
+                                borderColor: colors.secondary,
+                                borderWidth: 1.5,
+                                data: amountsArray,
+                                tooltipExtraData: posArray, 
+                                tooltipExtraData1: apgArray, 
+                                tooltipExtraData2: aphArray, 
+                            }
+                        ]
+                    };
+                
+                   
+                
+                // Configuration
+                const config = {
+                    type: 'bar',
+                    data: data,
+                    options: {
+                        maintainAspectRatio: false, // Set to false to allow custom width and height
+                        responsive: true,
+                        scales: {
+                            x: {
+                                stacked: true,
+                            },
+                            y: {
+                                stacked: true,
+                               
+                            }
+                        },
+                        plugins: {
+                            datalabels: {
+                                anchor: 'end',
+                                align: 'end',
+                                formatter: function(value, context) {
+                                    return value; // Display the value as label
+                                }
+                            },
+                            legend: {
+                                display: false
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    title: function(tooltipItems) {
+                                        let extraData = tooltipItems[0].dataset.tooltipExtraData[tooltipItems[0].dataIndex];
+                                        return tooltipItems[0].label + ' - ' + extraData;
+                                      },
+                                    label: function(context) {
+                                       // Accessing extra tooltip data
+                                let extraData = context.dataset.tooltipExtraData1[context.dataIndex];
+                                let extraData2 = context.dataset.tooltipExtraData2[context.dataIndex];
+                                let label = context.dataset.label + ': ' + context.parsed.y;
+                                // Append additional text with line break
+                                label += '\nTOI: ' + extraData;
+                                label += '\n+/-: ' + extraData2;
+                                return label;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                };
+                
+                
+                
+                
+                
+                  // Get the reference to the parent element
+                var parentElement = document.getElementById('totaldefenseChart_Parent');
+                
+                // Check if there is an old canvas
+                var oldCanvas = document.getElementById('games_played_chartDefense');
+                if (oldCanvas) {
+                    // If old canvas exists, remove it
+                    parentElement.removeChild(oldCanvas);
+                }
+                
+                      // Get the canvas element
+                      var canvas = document.createElement('canvas');
+                      canvas.id = 'games_played_chartDefense';
+                      //canvas.width = 400;
+                      //canvas.height = 200;
+                      document.getElementById('totaldefenseChart_Parent').appendChild(canvas);
+                    
+                      // Get the canvas context
+                      var ctx = canvas.getContext('2d');
+                
+                      
+                
+                    // Create Chart
+                    var myChart = new Chart(
+                        ctx,
+                        config
+                    );
+                   }
+                    break;
+                case 1:
+                    {
+                        const sortedData = defenseGames.sort((a, b) => b.TOI - a.TOI);
+    
+                        const namesArray = sortedData.map(obj => obj.label); // Corrected property name
+                        const amountsArray = sortedData.map(obj => obj.TOI);
+                        const posArray = sortedData.map(obj => obj.position);
+                        const apgArray = sortedData.map(obj => obj.PM);
+                        const aphArray = sortedData.map(obj => obj.amount);
+                    
+                        const data = {
+                            labels: namesArray,
+                            datasets: [
+                                {
+                                    label: 'TOI',
+                                    backgroundColor: colors.primary,
+                                    borderColor: colors.secondary,
+                                    borderWidth: 1.5,
+                                    data: amountsArray,
+                                    tooltipExtraData: posArray, 
+                                    tooltipExtraData1: apgArray, 
+                                    tooltipExtraData2: aphArray, 
+                                }
+                            ]
+                        };
+                    
+                       
+                    
+                    // Configuration
+                    const config = {
+                        type: 'bar',
+                        data: data,
+                        options: {
+                            maintainAspectRatio: false, // Set to false to allow custom width and height
+                            responsive: true,
+                            scales: {
+                                x: {
+                                    stacked: true,
+                                },
+                                y: {
+                                    stacked: true,
+                                   
+                                }
+                            },
+                            plugins: {
+                                datalabels: {
+                                    anchor: 'end',
+                                    align: 'end',
+                                    formatter: function(value, context) {
+                                        return value; // Display the value as label
+                                    }
+                                },
+                                legend: {
+                                    display: false
+                                },
+                                tooltip: {
+                                    callbacks: {
+                                        title: function(tooltipItems) {
+                                            let extraData = tooltipItems[0].dataset.tooltipExtraData[tooltipItems[0].dataIndex];
+                                            return tooltipItems[0].label + ' - ' + extraData;
+                                          },
+                                        label: function(context) {
+                                           // Accessing extra tooltip data
+                                    let extraData = context.dataset.tooltipExtraData1[context.dataIndex];
+                                    let extraData2 = context.dataset.tooltipExtraData2[context.dataIndex];
+                                    let label = context.dataset.label + ': ' + context.parsed.y;
+                                    // Append additional text with line break
+                                    label += '\n+/-: ' + extraData;
+                                    label += '\nGP: ' + extraData2;
+                                    return label;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    };
+                    
+                    
+                    
+                    
+                    
+                      // Get the reference to the parent element
+                    var parentElement = document.getElementById('totaldefenseChart_Parent');
+                    
+                    // Check if there is an old canvas
+                    var oldCanvas = document.getElementById('games_played_chartDefense');
+                    if (oldCanvas) {
+                        // If old canvas exists, remove it
+                        parentElement.removeChild(oldCanvas);
+                    }
+                    
+                          // Get the canvas element
+                          var canvas = document.createElement('canvas');
+                          canvas.id = 'games_played_chartDefense';
+                          //canvas.width = 400;
+                          //canvas.height = 200;
+                          document.getElementById('totaldefenseChart_Parent').appendChild(canvas);
+                        
+                          // Get the canvas context
+                          var ctx = canvas.getContext('2d');
+                    
+                          
+                    
+                        // Create Chart
+                        var myChart = new Chart(
+                            ctx,
+                            config
+                        );
+                    }
+                    break;
+                case 2:
+                    {
+                        const sortedData = defenseGames.sort((a, b) => b.PM - a.PM);
+    
+                        const namesArray = sortedData.map(obj => obj.label); // Corrected property name
+                        const amountsArray = sortedData.map(obj => obj.PM);
+                        const posArray = sortedData.map(obj => obj.position);
+                        const apgArray = sortedData.map(obj => obj.TOI);
+                        const aphArray = sortedData.map(obj => obj.amount);
+                    
+                        const data = {
+                            labels: namesArray,
+                            datasets: [
+                                {
+                                    label: '+/-',
+                                    backgroundColor: colors.primary,
+                                    borderColor: colors.secondary,
+                                    borderWidth: 1.5,
+                                    data: amountsArray,
+                                    tooltipExtraData: posArray, 
+                                    tooltipExtraData1: apgArray, 
+                                    tooltipExtraData2: aphArray, 
+                                }
+                            ]
+                        };
+                    
+                       
+                    
+                    // Configuration
+                    const config = {
+                        type: 'bar',
+                        data: data,
+                        options: {
+                            maintainAspectRatio: false, // Set to false to allow custom width and height
+                            responsive: true,
+                            scales: {
+                                x: {
+                                    stacked: true,
+                                },
+                                y: {
+                                    stacked: true,
+                                   
+                                }
+                            },
+                            plugins: {
+                                datalabels: {
+                                    anchor: 'end',
+                                    align: 'end',
+                                    formatter: function(value, context) {
+                                        return value; // Display the value as label
+                                    }
+                                },
+                                legend: {
+                                    display: false
+                                },
+                                tooltip: {
+                                    callbacks: {
+                                        title: function(tooltipItems) {
+                                            let extraData = tooltipItems[0].dataset.tooltipExtraData[tooltipItems[0].dataIndex];
+                                            return tooltipItems[0].label + ' - ' + extraData;
+                                          },
+                                        label: function(context) {
+                                           // Accessing extra tooltip data
+                                    let extraData = context.dataset.tooltipExtraData1[context.dataIndex];
+                                    let extraData2 = context.dataset.tooltipExtraData2[context.dataIndex];
+                                    let label = context.dataset.label + ': ' + context.parsed.y;
+                                    // Append additional text with line break
+                                    label += '\nTOI: ' + extraData;
+                                    label += '\nGP: ' + extraData2;
+                                    return label;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    };
+                    
+                    
+                    
+                    
+                    
+                      // Get the reference to the parent element
+                    var parentElement = document.getElementById('totaldefenseChart_Parent');
+                    
+                    // Check if there is an old canvas
+                    var oldCanvas = document.getElementById('games_played_chartDefense');
+                    if (oldCanvas) {
+                        // If old canvas exists, remove it
+                        parentElement.removeChild(oldCanvas);
+                    }
+                    
+                          // Get the canvas element
+                          var canvas = document.createElement('canvas');
+                          canvas.id = 'games_played_chartDefense';
+                          //canvas.width = 400;
+                          //canvas.height = 200;
+                          document.getElementById('totaldefenseChart_Parent').appendChild(canvas);
+                        
+                          // Get the canvas context
+                          var ctx = canvas.getContext('2d');
+                    
+                          
+                    
+                        // Create Chart
+                        var myChart = new Chart(
+                            ctx,
+                            config
+                        );
+                    }
+                    break;
+            }
+            break;
+        case 1:
+            switch (localIndex) {
+                case 0:
+                    {
+                        const sortedData = defensePoints.sort((a, b) => b.amount - a.amount);
+    
+    const namesArray = sortedData.map(obj => obj.label); // Corrected property name
+    const amountsArray = sortedData.map(obj => obj.amount);
+    const posArray = sortedData.map(obj => obj.position);
+    const apgArray = sortedData.map(obj => obj.PPG);
+    const aphArray = sortedData.map(obj => obj.PPH);
+
+    const data = {
+        labels: namesArray,
+        datasets: [
+            {
+                label: 'Points',
+                backgroundColor: colors.primary,
+                borderColor: colors.secondary,
+                borderWidth: 1.5,
+                data: amountsArray,
+                tooltipExtraData: posArray, 
+                tooltipExtraData1: apgArray, 
+                tooltipExtraData2: aphArray, 
+            }
+        ]
+    };
+
+   
+
+// Configuration
+const config = {
+    type: 'bar',
+    data: data,
+    options: {
+        maintainAspectRatio: false, // Set to false to allow custom width and height
+        responsive: true,
+        scales: {
+            x: {
+                stacked: true,
+            },
+            y: {
+                stacked: true,
+               
+            }
+        },
+        plugins: {
+            datalabels: {
+                anchor: 'end',
+                align: 'end',
+                formatter: function(value, context) {
+                    return value; // Display the value as label
+                }
+            },
+            legend: {
+                display: false
+            },
+            tooltip: {
+                callbacks: {
+                    title: function(tooltipItems) {
+                        let extraData = tooltipItems[0].dataset.tooltipExtraData[tooltipItems[0].dataIndex];
+                        return tooltipItems[0].label + ' - ' + extraData;
+                      },
+                    label: function(context) {
+                       // Accessing extra tooltip data
+                let extraData = context.dataset.tooltipExtraData1[context.dataIndex];
+                let extraData2 = context.dataset.tooltipExtraData2[context.dataIndex];
+                let label = context.dataset.label + ': ' + context.parsed.y;
+                // Append additional text with line break
+                label += '\nPPG: ' + extraData;
+                label += '\nPPH: ' + extraData2;
+                return label;
+                    }
+                }
+            }
+        }
+    }
+};
+
+
+
+
+
+
+  // Get the reference to the parent element
+var parentElement = document.getElementById('defensePointsChart_Parent');
+
+// Check if there is an old canvas
+var oldCanvas = document.getElementById('defenses_point_chart');
+if (oldCanvas) {
+    // If old canvas exists, remove it
+    parentElement.removeChild(oldCanvas);
+}
+
+      // Get the canvas element
+      var canvas = document.createElement('canvas');
+      canvas.id = 'defenses_point_chart';
+      //canvas.width = 400;
+      //canvas.height = 200;
+      document.getElementById('defensePointsChart_Parent').appendChild(canvas);
+    
+      // Get the canvas context
+      var ctx = canvas.getContext('2d');
+
+      
+
+    // Create Chart
+    var myChart = new Chart(
+        ctx,
+        config
+    );
+                    }
+                    break;
+                case 1:
+                    {
+                        const sortedData = defensePoints.sort((a, b) => b.PPG - a.PPG);
+    
+    const namesArray = sortedData.map(obj => obj.label); // Corrected property name
+    const amountsArray = sortedData.map(obj => obj.PPG);
+    const posArray = sortedData.map(obj => obj.position);
+    const apgArray = sortedData.map(obj => obj.PPH);
+    const aphArray = sortedData.map(obj => obj.amount);
+
+    const data = {
+        labels: namesArray,
+        datasets: [
+            {
+                label: 'PPG',
+                backgroundColor: colors.primary,
+                borderColor: colors.secondary,
+                borderWidth: 1.5,
+                data: amountsArray,
+                tooltipExtraData: posArray, 
+                tooltipExtraData1: apgArray, 
+                tooltipExtraData2: aphArray, 
+            }
+        ]
+    };
+
+   
+
+// Configuration
+const config = {
+    type: 'bar',
+    data: data,
+    options: {
+        maintainAspectRatio: false, // Set to false to allow custom width and height
+        responsive: true,
+        scales: {
+            x: {
+                stacked: true,
+            },
+            y: {
+                stacked: true,
+               
+            }
+        },
+        plugins: {
+            datalabels: {
+                anchor: 'end',
+                align: 'end',
+                formatter: function(value, context) {
+                    return value; // Display the value as label
+                }
+            },
+            legend: {
+                display: false
+            },
+            tooltip: {
+                callbacks: {
+                    title: function(tooltipItems) {
+                        let extraData = tooltipItems[0].dataset.tooltipExtraData[tooltipItems[0].dataIndex];
+                        return tooltipItems[0].label + ' - ' + extraData;
+                      },
+                    label: function(context) {
+                       // Accessing extra tooltip data
+                let extraData = context.dataset.tooltipExtraData1[context.dataIndex];
+                let extraData2 = context.dataset.tooltipExtraData2[context.dataIndex];
+                let label = context.dataset.label + ': ' + context.parsed.y;
+                // Append additional text with line break
+                label += '\nPPH: ' + extraData;
+                label += '\nPoints: ' + extraData2;
+                return label;
+                    }
+                }
+            }
+        }
+    }
+};
+
+
+
+
+
+
+  // Get the reference to the parent element
+var parentElement = document.getElementById('defensePointsChart_Parent');
+
+// Check if there is an old canvas
+var oldCanvas = document.getElementById('defenses_point_chart');
+if (oldCanvas) {
+    // If old canvas exists, remove it
+    parentElement.removeChild(oldCanvas);
+}
+
+      // Get the canvas element
+      var canvas = document.createElement('canvas');
+      canvas.id = 'defenses_point_chart';
+      //canvas.width = 400;
+      //canvas.height = 200;
+      document.getElementById('defensePointsChart_Parent').appendChild(canvas);
+    
+      // Get the canvas context
+      var ctx = canvas.getContext('2d');
+
+      
+
+    // Create Chart
+    var myChart = new Chart(
+        ctx,
+        config
+    );
+                    }
+                    break;
+                case 2:
+                    {
+                        const sortedData = defensePoints.sort((a, b) => b.PPH - a.PPH);
+    
+    const namesArray = sortedData.map(obj => obj.label); // Corrected property name
+    const amountsArray = sortedData.map(obj => obj.PPH);
+    const posArray = sortedData.map(obj => obj.position);
+    const apgArray = sortedData.map(obj => obj.PPG);
+    const aphArray = sortedData.map(obj => obj.amount);
+
+    const data = {
+        labels: namesArray,
+        datasets: [
+            {
+                label: 'PPH',
+                backgroundColor: colors.primary,
+                borderColor: colors.secondary,
+                borderWidth: 1.5,
+                data: amountsArray,
+                tooltipExtraData: posArray, 
+                tooltipExtraData1: apgArray, 
+                tooltipExtraData2: aphArray, 
+            }
+        ]
+    };
+
+   
+
+// Configuration
+const config = {
+    type: 'bar',
+    data: data,
+    options: {
+        maintainAspectRatio: false, // Set to false to allow custom width and height
+        responsive: true,
+        scales: {
+            x: {
+                stacked: true,
+            },
+            y: {
+                stacked: true,
+               
+            }
+        },
+        plugins: {
+            datalabels: {
+                anchor: 'end',
+                align: 'end',
+                formatter: function(value, context) {
+                    return value; // Display the value as label
+                }
+            },
+            legend: {
+                display: false
+            },
+            tooltip: {
+                callbacks: {
+                    title: function(tooltipItems) {
+                        let extraData = tooltipItems[0].dataset.tooltipExtraData[tooltipItems[0].dataIndex];
+                        return tooltipItems[0].label + ' - ' + extraData;
+                      },
+                    label: function(context) {
+                       // Accessing extra tooltip data
+                let extraData = context.dataset.tooltipExtraData1[context.dataIndex];
+                let extraData2 = context.dataset.tooltipExtraData2[context.dataIndex];
+                let label = context.dataset.label + ': ' + context.parsed.y;
+                // Append additional text with line break
+                label += '\nPPG: ' + extraData;
+                label += '\nPoints: ' + extraData2;
+                return label;
+                    }
+                }
+            }
+        }
+    }
+};
+
+
+
+
+
+
+  // Get the reference to the parent element
+var parentElement = document.getElementById('defensePointsChart_Parent');
+
+// Check if there is an old canvas
+var oldCanvas = document.getElementById('defenses_point_chart');
+if (oldCanvas) {
+    // If old canvas exists, remove it
+    parentElement.removeChild(oldCanvas);
+}
+
+      // Get the canvas element
+      var canvas = document.createElement('canvas');
+      canvas.id = 'defenses_point_chart';
+      //canvas.width = 400;
+      //canvas.height = 200;
+      document.getElementById('defensePointsChart_Parent').appendChild(canvas);
+    
+      // Get the canvas context
+      var ctx = canvas.getContext('2d');
+
+      
+
+    // Create Chart
+    var myChart = new Chart(
+        ctx,
+        config
+    );
+                    }
+                    break;
+            }
+            break;
+        case 2:
+            switch (localIndex) {
+                case 0:
+                    {
+                        const sortedData = defenseGoals.sort((a, b) => b.goalsPerGame - a.goalsPerGame);
+    
+                        const namesArray = sortedData.map(obj => obj.label); // Corrected property name
+                        const amountsArray = sortedData.map(obj => obj.goalsPerGame);
+                        const posArray = sortedData.map(obj => obj.position);
+                        const apgArray = sortedData.map(obj => obj.goalsPerHour);
+                        const aphArray = sortedData.map(obj => obj.amount);
+                    
+                        const data = {
+                            labels: namesArray,
+                            datasets: [
+                                {
+                                    label: 'GPG',
+                                    backgroundColor: colors.primary,
+                                    borderColor: colors.secondary,
+                                    borderWidth: 1.5,
+                                    data: amountsArray,
+                                    tooltipExtraData: posArray, 
+                                    tooltipExtraData1: apgArray, 
+                                    tooltipExtraData2: aphArray, 
+                                }
+                            ]
+                        };
+                    
+                    // Configuration
+                    const config = {
+                        type: 'bar',
+                        data: data,
+                        options: {
+                            maintainAspectRatio: false, // Set to false to allow custom width and height
+                            responsive: true,
+                            scales: {
+                                x: {
+                                    stacked: true,
+                                },
+                                y: {
+                                    stacked: true,
+                                }
+                            },
+                            plugins: {
+                                datalabels: {
+                                    anchor: 'end',
+                                    align: 'end',
+                                    formatter: function(value, context) {
+                                        return value; // Display the value as label
+                                    }
+                                },
+                                legend: {
+                                    display: false
+                                },
+                                tooltip: {
+                                    callbacks: {
+                                        title: function(tooltipItems) {
+                                            let extraData = tooltipItems[0].dataset.tooltipExtraData[tooltipItems[0].dataIndex];
+                                            return tooltipItems[0].label + ' - ' + extraData;
+                                          },
+                                        label: function(context) {
+                                           // Accessing extra tooltip data
+                                    let extraData = context.dataset.tooltipExtraData1[context.dataIndex];
+                                    let extraData2 = context.dataset.tooltipExtraData2[context.dataIndex];
+                                    let label = context.dataset.label + ': ' + context.parsed.y;
+                                    // Append additional text with line break
+                                    label += '\nGPH: ' + extraData;
+                                    label += '\nGoals: ' + extraData2;
+                                    return label;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    };
+                      // Get the reference to the parent element
+                    var parentElement = document.getElementById('defenseGoalChart_Parent');
+                    // Check if there is an old canvas
+                    var oldCanvas = document.getElementById('defenses_goal_chart');
+                    if (oldCanvas) {
+                        // If old canvas exists, remove it
+                        parentElement.removeChild(oldCanvas);
+                    }
+                          // Get the canvas element
+                          var canvas = document.createElement('canvas');
+                          canvas.id = 'defenses_goal_chart';
+                          document.getElementById('defenseGoalChart_Parent').appendChild(canvas);
+                          var ctx = canvas.getContext('2d');
+                        // Create Chart
+                        var myChart = new Chart(
+                            ctx,
+                            config
+                        );
+                    }
+                    break;
+                case 1:
+                    {
+                        const sortedData = defenseGoals.sort((a, b) => b.goalsPerHour - a.goalsPerHour);
+    
+                        const namesArray = sortedData.map(obj => obj.label); // Corrected property name
+                        const amountsArray = sortedData.map(obj => obj.goalsPerHour);
+                        const posArray = sortedData.map(obj => obj.position);
+                        const apgArray = sortedData.map(obj => obj.goalsPerGame);
+                        const aphArray = sortedData.map(obj => obj.amount);
+                    
+                        const data = {
+                            labels: namesArray,
+                            datasets: [
+                                {
+                                    label: 'GPH',
+                                    backgroundColor: colors.primary,
+                                    borderColor: colors.secondary,
+                                    borderWidth: 1.5,
+                                    data: amountsArray,
+                                    tooltipExtraData: posArray, 
+                                    tooltipExtraData1: apgArray, 
+                                    tooltipExtraData2: aphArray, 
+                                }
+                            ]
+                        };
+                    
+                    // Configuration
+                    const config = {
+                        type: 'bar',
+                        data: data,
+                        options: {
+                            maintainAspectRatio: false, // Set to false to allow custom width and height
+                            responsive: true,
+                            scales: {
+                                x: {
+                                    stacked: true,
+                                },
+                                y: {
+                                    stacked: true,
+                                }
+                            },
+                            plugins: {
+                                datalabels: {
+                                    anchor: 'end',
+                                    align: 'end',
+                                    formatter: function(value, context) {
+                                        return value; // Display the value as label
+                                    }
+                                },
+                                legend: {
+                                    display: false
+                                },
+                                tooltip: {
+                                    callbacks: {
+                                        title: function(tooltipItems) {
+                                            let extraData = tooltipItems[0].dataset.tooltipExtraData[tooltipItems[0].dataIndex];
+                                            return tooltipItems[0].label + ' - ' + extraData;
+                                          },
+                                        label: function(context) {
+                                           // Accessing extra tooltip data
+                                    let extraData = context.dataset.tooltipExtraData1[context.dataIndex];
+                                    let extraData2 = context.dataset.tooltipExtraData2[context.dataIndex];
+                                    let label = context.dataset.label + ': ' + context.parsed.y;
+                                    // Append additional text with line break
+                                    label += '\nGPG: ' + extraData;
+                                    label += '\nGoals: ' + extraData2;
+                                    return label;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    };
+                      // Get the reference to the parent element
+                    var parentElement = document.getElementById('defenseGoalChart_Parent');
+                    // Check if there is an old canvas
+                    var oldCanvas = document.getElementById('defenses_goal_chart');
+                    if (oldCanvas) {
+                        // If old canvas exists, remove it
+                        parentElement.removeChild(oldCanvas);
+                    }
+                          // Get the canvas element
+                          var canvas = document.createElement('canvas');
+                          canvas.id = 'defenses_goal_chart';
+                          document.getElementById('defenseGoalChart_Parent').appendChild(canvas);
+                          var ctx = canvas.getContext('2d');
+                        // Create Chart
+                        var myChart = new Chart(
+                            ctx,
+                            config
+                        );
+                    }
+                    break;
+                case 2:
+                    {
+                        const sortedData = defenseGoals.sort((a, b) => b.amount - a.amount);
+    
+                        const namesArray = sortedData.map(obj => obj.label); // Corrected property name
+                        const amountsArray = sortedData.map(obj => obj.amount);
+                        const posArray = sortedData.map(obj => obj.position);
+                        const apgArray = sortedData.map(obj => obj.goalsPerGame);
+                        const aphArray = sortedData.map(obj => obj.goalsPerHour);
+                    
+                        const data = {
+                            labels: namesArray,
+                            datasets: [
+                                {
+                                    label: 'Goals',
+                                    backgroundColor: colors.primary,
+                                    borderColor: colors.secondary,
+                                    borderWidth: 1.5,
+                                    data: amountsArray,
+                                    tooltipExtraData: posArray, 
+                                    tooltipExtraData1: apgArray, 
+                                    tooltipExtraData2: aphArray, 
+                                }
+                            ]
+                        };
+                    
+                    // Configuration
+                    const config = {
+                        type: 'bar',
+                        data: data,
+                        options: {
+                            maintainAspectRatio: false, // Set to false to allow custom width and height
+                            responsive: true,
+                            scales: {
+                                x: {
+                                    stacked: true,
+                                },
+                                y: {
+                                    stacked: true,
+                                }
+                            },
+                            plugins: {
+                                datalabels: {
+                                    anchor: 'end',
+                                    align: 'end',
+                                    formatter: function(value, context) {
+                                        return value; // Display the value as label
+                                    }
+                                },
+                                legend: {
+                                    display: false
+                                },
+                                tooltip: {
+                                    callbacks: {
+                                        title: function(tooltipItems) {
+                                            let extraData = tooltipItems[0].dataset.tooltipExtraData[tooltipItems[0].dataIndex];
+                                            return tooltipItems[0].label + ' - ' + extraData;
+                                          },
+                                        label: function(context) {
+                                           // Accessing extra tooltip data
+                                    let extraData = context.dataset.tooltipExtraData1[context.dataIndex];
+                                    let extraData2 = context.dataset.tooltipExtraData2[context.dataIndex];
+                                    let label = context.dataset.label + ': ' + context.parsed.y;
+                                    // Append additional text with line break
+                                    label += '\nGPG: ' + extraData;
+                                    label += '\nGPH: ' + extraData2;
+                                    return label;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    };
+                      // Get the reference to the parent element
+                    var parentElement = document.getElementById('defenseGoalChart_Parent');
+                    // Check if there is an old canvas
+                    var oldCanvas = document.getElementById('defenses_goal_chart');
+                    if (oldCanvas) {
+                        // If old canvas exists, remove it
+                        parentElement.removeChild(oldCanvas);
+                    }
+                          // Get the canvas element
+                          var canvas = document.createElement('canvas');
+                          canvas.id = 'defenses_goal_chart';
+                          document.getElementById('defenseGoalChart_Parent').appendChild(canvas);
+                          var ctx = canvas.getContext('2d');
+                        // Create Chart
+                        var myChart = new Chart(
+                            ctx,
+                            config
+                        );
+                    }
+                    break;
+            }
+            break;
+        case 3:
+            switch (localIndex) {
+                case 0:
+                    {
+                        const sortedData = defenseAssists.sort((a, b) => b.amount - a.amount);
+    
+                        const namesArray = sortedData.map(obj => obj.label); // Corrected property name
+                        const amountsArray = sortedData.map(obj => obj.amount);
+                        const posArray = sortedData.map(obj => obj.position);
+                        const apgArray = sortedData.map(obj => obj.APG);
+                        const aphArray = sortedData.map(obj => obj.APH);
+                    
+                        const data = {
+                            labels: namesArray,
+                            datasets: [
+                                {
+                                    label: 'Assists',
+                                    backgroundColor: colors.primary,
+                                    borderColor: colors.secondary,
+                                    borderWidth: 1.5,
+                                    data: amountsArray,
+                                    tooltipExtraData: posArray, 
+                                    tooltipExtraData1: apgArray, 
+                                    tooltipExtraData2: aphArray, 
+                                }
+                            ]
+                        };
+                    
+                       
+                    
+                    // Configuration
+                    const config = {
+                        type: 'bar',
+                        data: data,
+                        options: {
+                            maintainAspectRatio: false, // Set to false to allow custom width and height
+                            responsive: true,
+                            scales: {
+                                x: {
+                                    stacked: true,
+                                },
+                                y: {
+                                    stacked: true,
+                                   
+                                }
+                            },
+                            plugins: {
+                                datalabels: {
+                                    anchor: 'end',
+                                    align: 'end',
+                                    formatter: function(value, context) {
+                                        return value; // Display the value as label
+                                    }
+                                },
+                                legend: {
+                                    display: false
+                                },
+                                tooltip: {
+                                    callbacks: {
+                                        title: function(tooltipItems) {
+                                            let extraData = tooltipItems[0].dataset.tooltipExtraData[tooltipItems[0].dataIndex];
+                                            return tooltipItems[0].label + ' - ' + extraData;
+                                          },
+                                        label: function(context) {
+                                           // Accessing extra tooltip data
+                                    let extraData = context.dataset.tooltipExtraData1[context.dataIndex];
+                                    let extraData2 = context.dataset.tooltipExtraData2[context.dataIndex];
+                                    let label = context.dataset.label + ': ' + context.parsed.y;
+                                    // Append additional text with line break
+                                    label += '\nAPG: ' + extraData;
+                                    label += '\nAPH: ' + extraData2;
+                                    return label;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    };
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                      // Get the reference to the parent element
+                    var parentElement = document.getElementById('defenseAssistsChart_Parent');
+                    
+                    // Check if there is an old canvas
+                    var oldCanvas = document.getElementById('defenses_Assists_chart');
+                    if (oldCanvas) {
+                        // If old canvas exists, remove it
+                        parentElement.removeChild(oldCanvas);
+                    }
+                    
+                          // Get the canvas element
+                          var canvas = document.createElement('canvas');
+                          canvas.id = 'defenses_Assists_chart';
+                          //canvas.width = 400;
+                          //canvas.height = 200;
+                          document.getElementById('defenseAssistsChart_Parent').appendChild(canvas);
+                        
+                          // Get the canvas context
+                          var ctx = canvas.getContext('2d');
+                    
+                          
+                    
+                        // Create Chart
+                        var myChart = new Chart(
+                            ctx,
+                            config
+                        );
+                    
+                    
+                    }
+                    break;
+                case 1:
+                    {
+                        const sortedData = defenseAssists.sort((a, b) => b.APG - a.APG);
+    
+                        const namesArray = sortedData.map(obj => obj.label); // Corrected property name
+                        const amountsArray = sortedData.map(obj => obj.APG);
+                        const posArray = sortedData.map(obj => obj.position);
+                        const apgArray = sortedData.map(obj => obj.APH);
+                        const aphArray = sortedData.map(obj => obj.amount);
+                    
+                        const data = {
+                            labels: namesArray,
+                            datasets: [
+                                {
+                                    label: 'APG',
+                                    backgroundColor: colors.primary,
+                                    borderColor: colors.secondary,
+                                    borderWidth: 1.5,
+                                    data: amountsArray,
+                                    tooltipExtraData: posArray, 
+                                    tooltipExtraData1: apgArray, 
+                                    tooltipExtraData2: aphArray, 
+                                }
+                            ]
+                        };
+                    
+                       
+                    
+                    // Configuration
+                    const config = {
+                        type: 'bar',
+                        data: data,
+                        options: {
+                            maintainAspectRatio: false, // Set to false to allow custom width and height
+                            responsive: true,
+                            scales: {
+                                x: {
+                                    stacked: true,
+                                },
+                                y: {
+                                    stacked: true,
+                                   
+                                }
+                            },
+                            plugins: {
+                                datalabels: {
+                                    anchor: 'end',
+                                    align: 'end',
+                                    formatter: function(value, context) {
+                                        return value; // Display the value as label
+                                    }
+                                },
+                                legend: {
+                                    display: false
+                                },
+                                tooltip: {
+                                    callbacks: {
+                                        title: function(tooltipItems) {
+                                            let extraData = tooltipItems[0].dataset.tooltipExtraData[tooltipItems[0].dataIndex];
+                                            return tooltipItems[0].label + ' - ' + extraData;
+                                          },
+                                        label: function(context) {
+                                           // Accessing extra tooltip data
+                                    let extraData = context.dataset.tooltipExtraData1[context.dataIndex];
+                                    let extraData2 = context.dataset.tooltipExtraData2[context.dataIndex];
+                                    let label = context.dataset.label + ': ' + context.parsed.y;
+                                    // Append additional text with line break
+                                    label += '\nAPH: ' + extraData;
+                                    label += '\nAssists: ' + extraData2;
+                                    return label;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    };
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                      // Get the reference to the parent element
+                    var parentElement = document.getElementById('defenseAssistsChart_Parent');
+                    
+                    // Check if there is an old canvas
+                    var oldCanvas = document.getElementById('defenses_Assists_chart');
+                    if (oldCanvas) {
+                        // If old canvas exists, remove it
+                        parentElement.removeChild(oldCanvas);
+                    }
+                    
+                          // Get the canvas element
+                          var canvas = document.createElement('canvas');
+                          canvas.id = 'defenses_Assists_chart';
+                          //canvas.width = 400;
+                          //canvas.height = 200;
+                          document.getElementById('defenseAssistsChart_Parent').appendChild(canvas);
+                        
+                          // Get the canvas context
+                          var ctx = canvas.getContext('2d');
+                    
+                          
+                    
+                        // Create Chart
+                        var myChart = new Chart(
+                            ctx,
+                            config
+                        );
+                    
+                    
+                    }
+                    break;
+                case 2:
+                    {
+                        const sortedData = defenseAssists.sort((a, b) => b.APH - a.APH);
+    
+                        const namesArray = sortedData.map(obj => obj.label); // Corrected property name
+                        const amountsArray = sortedData.map(obj => obj.APH);
+                        const posArray = sortedData.map(obj => obj.position);
+                        const apgArray = sortedData.map(obj => obj.APG);
+                        const aphArray = sortedData.map(obj => obj.amount);
+                    
+                        const data = {
+                            labels: namesArray,
+                            datasets: [
+                                {
+                                    label: 'APH',
+                                    backgroundColor: colors.primary,
+                                    borderColor: colors.secondary,
+                                    borderWidth: 1.5,
+                                    data: amountsArray,
+                                    tooltipExtraData: posArray, 
+                                    tooltipExtraData1: apgArray, 
+                                    tooltipExtraData2: aphArray, 
+                                }
+                            ]
+                        };
+                    
+                       
+                    
+                    // Configuration
+                    const config = {
+                        type: 'bar',
+                        data: data,
+                        options: {
+                            maintainAspectRatio: false, // Set to false to allow custom width and height
+                            responsive: true,
+                            scales: {
+                                x: {
+                                    stacked: true,
+                                },
+                                y: {
+                                    stacked: true,
+                                   
+                                }
+                            },
+                            plugins: {
+                                datalabels: {
+                                    anchor: 'end',
+                                    align: 'end',
+                                    formatter: function(value, context) {
+                                        return value; // Display the value as label
+                                    }
+                                },
+                                legend: {
+                                    display: false
+                                },
+                                tooltip: {
+                                    callbacks: {
+                                        title: function(tooltipItems) {
+                                            let extraData = tooltipItems[0].dataset.tooltipExtraData[tooltipItems[0].dataIndex];
+                                            return tooltipItems[0].label + ' - ' + extraData;
+                                          },
+                                        label: function(context) {
+                                           // Accessing extra tooltip data
+                                    let extraData = context.dataset.tooltipExtraData1[context.dataIndex];
+                                    let extraData2 = context.dataset.tooltipExtraData2[context.dataIndex];
+                                    let label = context.dataset.label + ': ' + context.parsed.y;
+                                    // Append additional text with line break
+                                    label += '\nAPG: ' + extraData;
+                                    label += '\nAssists: ' + extraData2;
+                                    return label;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    };
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                      // Get the reference to the parent element
+                    var parentElement = document.getElementById('defenseAssistsChart_Parent');
+                    
+                    // Check if there is an old canvas
+                    var oldCanvas = document.getElementById('defenses_Assists_chart');
+                    if (oldCanvas) {
+                        // If old canvas exists, remove it
+                        parentElement.removeChild(oldCanvas);
+                    }
+                    
+                          // Get the canvas element
+                          var canvas = document.createElement('canvas');
+                          canvas.id = 'defenses_Assists_chart';
+                          //canvas.width = 400;
+                          //canvas.height = 200;
+                          document.getElementById('defenseAssistsChart_Parent').appendChild(canvas);
+                        
+                          // Get the canvas context
+                          var ctx = canvas.getContext('2d');
+                    
+                          
+                    
+                        // Create Chart
+                        var myChart = new Chart(
+                            ctx,
+                            config
+                        );
+                    
+                    
+                    }
+                    break;
+            }
+            break;
+        case 4:
+            switch (localIndex) {
+                case 0:
+                    {
+                        const sortedData = defenseShots.sort((a, b) => b.amount - a.amount);
+    
+    const namesArray = sortedData.map(obj => obj.label); // Corrected property name
+    const amountsArray = sortedData.map(obj => obj.amount);
+    const posArray = sortedData.map(obj => obj.position);
+    const apgArray = sortedData.map(obj => obj.SP);
+    const aphArray = sortedData.map(obj => obj.SPH);
+
+    const data = {
+        labels: namesArray,
+        datasets: [
+            {
+                label: 'Shots',
+                backgroundColor: colors.primary,
+                borderColor: colors.secondary,
+                borderWidth: 1.5,
+                data: amountsArray,
+                tooltipExtraData: posArray, 
+                tooltipExtraData1: apgArray, 
+                tooltipExtraData2: aphArray, 
+            }
+        ]
+    };
+
+   
+
+// Configuration
+const config = {
+    type: 'bar',
+    data: data,
+    options: {
+        maintainAspectRatio: false, // Set to false to allow custom width and height
+        responsive: true,
+        scales: {
+            x: {
+                stacked: true,
+            },
+            y: {
+                stacked: true,
+               
+            }
+        },
+        plugins: {
+            datalabels: {
+                anchor: 'end',
+                align: 'end',
+                formatter: function(value, context) {
+                    return value; // Display the value as label
+                }
+            },
+            legend: {
+                display: false
+            },
+            tooltip: {
+                callbacks: {
+                    title: function(tooltipItems) {
+                        let extraData = tooltipItems[0].dataset.tooltipExtraData[tooltipItems[0].dataIndex];
+                        return tooltipItems[0].label + ' - ' + extraData;
+                      },
+                    label: function(context) {
+                       // Accessing extra tooltip data
+                let extraData = context.dataset.tooltipExtraData1[context.dataIndex];
+                let extraData2 = context.dataset.tooltipExtraData2[context.dataIndex];
+                let label = context.dataset.label + ': ' + context.parsed.y;
+                // Append additional text with line break
+                label += '\nS: ' + extraData + "%";
+                label += '\nSPH: ' + extraData2;
+                return label;
+                    }
+                }
+            }
+        }
+    }
+};
+
+
+
+
+
+  // Get the reference to the parent element
+var parentElement = document.getElementById('defenseShotsChart_Parent');
+
+// Check if there is an old canvas
+var oldCanvas = document.getElementById('defenses_Shots_chart');
+if (oldCanvas) {
+    // If old canvas exists, remove it
+    parentElement.removeChild(oldCanvas);
+}
+
+      // Get the canvas element
+      var canvas = document.createElement('canvas');
+      canvas.id = 'defenses_Shots_chart';
+      //canvas.width = 400;
+      //canvas.height = 200;
+      document.getElementById('defenseShotsChart_Parent').appendChild(canvas);
+    
+      // Get the canvas context
+      var ctx = canvas.getContext('2d');
+
+      
+
+    // Create Chart
+    var myChart = new Chart(
+        ctx,
+        config
+    );
+                    }
+                    break;
+                case 1:
+                    {
+                        const sortedData = defenseShots.sort((a, b) => b.SP - a.SP);
+    
+    const namesArray = sortedData.map(obj => obj.label); // Corrected property name
+    const amountsArray = sortedData.map(obj => obj.SP);
+    const posArray = sortedData.map(obj => obj.position);
+    const apgArray = sortedData.map(obj => obj.SPH);
+    const aphArray = sortedData.map(obj => obj.amount);
+
+    const data = {
+        labels: namesArray,
+        datasets: [
+            {
+                label: 'S',
+                backgroundColor: colors.primary,
+                borderColor: colors.secondary,
+                borderWidth: 1.5,
+                data: amountsArray,
+                tooltipExtraData: posArray, 
+                tooltipExtraData1: apgArray, 
+                tooltipExtraData2: aphArray, 
+            }
+        ]
+    };
+
+   
+
+// Configuration
+const config = {
+    type: 'bar',
+    data: data,
+    options: {
+        maintainAspectRatio: false, // Set to false to allow custom width and height
+        responsive: true,
+        scales: {
+            x: {
+                stacked: true,
+            },
+            y: {
+                stacked: true,
+               
+            }
+        },
+        plugins: {
+            datalabels: {
+                anchor: 'end',
+                align: 'end',
+                formatter: function(value, context) {
+                    return value; // Display the value as label
+                }
+            },
+            legend: {
+                display: false
+            },
+            tooltip: {
+                callbacks: {
+                    title: function(tooltipItems) {
+                        let extraData = tooltipItems[0].dataset.tooltipExtraData[tooltipItems[0].dataIndex];
+                        return tooltipItems[0].label + ' - ' + extraData;
+                      },
+                    label: function(context) {
+                       // Accessing extra tooltip data
+                let extraData = context.dataset.tooltipExtraData1[context.dataIndex];
+                let extraData2 = context.dataset.tooltipExtraData2[context.dataIndex];
+                let label = context.dataset.label + ': ' + context.parsed.y;
+                // Append additional text with line break
+                label += '\nSPH: ' + extraData + "%";
+                label += '\nShots: ' + extraData2;
+                return label;
+                    }
+                }
+            }
+        }
+    }
+};
+
+
+
+
+
+  // Get the reference to the parent element
+var parentElement = document.getElementById('defenseShotsChart_Parent');
+
+// Check if there is an old canvas
+var oldCanvas = document.getElementById('defenses_Shots_chart');
+if (oldCanvas) {
+    // If old canvas exists, remove it
+    parentElement.removeChild(oldCanvas);
+}
+
+      // Get the canvas element
+      var canvas = document.createElement('canvas');
+      canvas.id = 'defenses_Shots_chart';
+      //canvas.width = 400;
+      //canvas.height = 200;
+      document.getElementById('defenseShotsChart_Parent').appendChild(canvas);
+    
+      // Get the canvas context
+      var ctx = canvas.getContext('2d');
+
+      
+
+    // Create Chart
+    var myChart = new Chart(
+        ctx,
+        config
+    );
+                    }
+                    break;
+                case 2:
+                    {
+                        const sortedData = defenseShots.sort((a, b) => b.SPH - a.SPH);
+    
+    const namesArray = sortedData.map(obj => obj.label); // Corrected property name
+    const amountsArray = sortedData.map(obj => obj.SPH);
+    const posArray = sortedData.map(obj => obj.position);
+    const apgArray = sortedData.map(obj => obj.SP);
+    const aphArray = sortedData.map(obj => obj.amount);
+
+    const data = {
+        labels: namesArray,
+        datasets: [
+            {
+                label: 'SPH',
+                backgroundColor: colors.primary,
+                borderColor: colors.secondary,
+                borderWidth: 1.5,
+                data: amountsArray,
+                tooltipExtraData: posArray, 
+                tooltipExtraData1: apgArray, 
+                tooltipExtraData2: aphArray, 
+            }
+        ]
+    };
+
+   
+
+// Configuration
+const config = {
+    type: 'bar',
+    data: data,
+    options: {
+        maintainAspectRatio: false, // Set to false to allow custom width and height
+        responsive: true,
+        scales: {
+            x: {
+                stacked: true,
+            },
+            y: {
+                stacked: true,
+               
+            }
+        },
+        plugins: {
+            datalabels: {
+                anchor: 'end',
+                align: 'end',
+                formatter: function(value, context) {
+                    return value; // Display the value as label
+                }
+            },
+            legend: {
+                display: false
+            },
+            tooltip: {
+                callbacks: {
+                    title: function(tooltipItems) {
+                        let extraData = tooltipItems[0].dataset.tooltipExtraData[tooltipItems[0].dataIndex];
+                        return tooltipItems[0].label + ' - ' + extraData;
+                      },
+                    label: function(context) {
+                       // Accessing extra tooltip data
+                let extraData = context.dataset.tooltipExtraData1[context.dataIndex];
+                let extraData2 = context.dataset.tooltipExtraData2[context.dataIndex];
+                let label = context.dataset.label + ': ' + context.parsed.y;
+                // Append additional text with line break
+                label += '\nS: ' + extraData + "%";
+                label += '\nShots: ' + extraData2;
+                return label;
+                    }
+                }
+            }
+        }
+    }
+};
+
+
+
+
+
+  // Get the reference to the parent element
+var parentElement = document.getElementById('defenseShotsChart_Parent');
+
+// Check if there is an old canvas
+var oldCanvas = document.getElementById('defenses_Shots_chart');
+if (oldCanvas) {
+    // If old canvas exists, remove it
+    parentElement.removeChild(oldCanvas);
+}
+
+      // Get the canvas element
+      var canvas = document.createElement('canvas');
+      canvas.id = 'defenses_Shots_chart';
+      //canvas.width = 400;
+      //canvas.height = 200;
+      document.getElementById('defenseShotsChart_Parent').appendChild(canvas);
+    
+      // Get the canvas context
+      var ctx = canvas.getContext('2d');
+
+      
+
+    // Create Chart
+    var myChart = new Chart(
+        ctx,
+        config
+    );
+                    }
+                    break;
+            }
+            break;
+        default:
+            // Handle default case
+            break;
+    }
+}
+
+
   function getTeamName(index) {
     const teams = [
         "Anaheim Ducks", "Arizona Coyotes", "Boston Bruins", "Buffalo Sabres", "Calgary Flames",
@@ -2048,6 +3895,12 @@ let forwardPoints = [];
 let forwardGoals = [];
 let forwardAssists = [];
 let forwardShots= [];
+
+let defenseGames = []; 
+let defensePoints = [];
+let defenseGoals = [];
+let defenseAssists = [];
+let defenseShots= [];
 function create_forwards_charts(forwards, colors){
 
     forwardGames = [];
@@ -2147,7 +4000,7 @@ const config = {
 
 
   // Get the reference to the parent element
-var parentElement = document.getElementById('totalChart_Parent');
+var parentElement = document.getElementById('totalForwardChart_Parent');
 
 // Check if there is an old canvas
 var oldCanvas = document.getElementById('games_played_chart');
@@ -2161,7 +4014,7 @@ if (oldCanvas) {
       canvas.id = 'games_played_chart';
       //canvas.width = 400;
       //canvas.height = 200;
-      document.getElementById('totalChart_Parent').appendChild(canvas);
+      document.getElementById('totalForwardChart_Parent').appendChild(canvas);
     
       // Get the canvas context
       var ctx = canvas.getContext('2d');
@@ -2668,6 +4521,642 @@ if (oldCanvas) {
       //canvas.width = 400;
       //canvas.height = 200;
       document.getElementById('forwardShotsChart_Parent').appendChild(canvas);
+    
+      // Get the canvas context
+      var ctx = canvas.getContext('2d');
+
+      
+
+    // Create Chart
+    var myChart = new Chart(
+        ctx,
+        config
+    );
+
+}
+
+
+function create_defense_charts(defenses, colors){
+
+    defenseGames = [];
+    for (const skater of defenses) {
+        let name = skater.firstName.default + " " + skater.lastName.default;
+        let points = skater.gamesPlayed;
+        let position = skater.positionCode;
+        let m_toi = skater.avgTimeOnIcePerGame / 60;
+        let m_pm = skater.plusMinus;
+        defenseGames.push({
+            label: name,
+            amount: points,
+            position: position,
+            TOI: m_toi.toFixed(2),
+            PM: m_pm
+
+        });
+    }
+   
+    const sortedData = defenseGames.sort((a, b) => b.amount - a.amount);
+    
+    const namesArray = sortedData.map(obj => obj.label); // Corrected property name
+    const amountsArray = sortedData.map(obj => obj.amount);
+    const posArray = sortedData.map(obj => obj.position);
+    const apgArray = sortedData.map(obj => obj.TOI);
+    const aphArray = sortedData.map(obj => obj.PM);
+
+    const data = {
+        labels: namesArray,
+        datasets: [
+            {
+                label: 'Games Played',
+                backgroundColor: colors.primary,
+                borderColor: colors.secondary,
+                borderWidth: 1.5,
+                data: amountsArray,
+                tooltipExtraData: posArray, 
+                tooltipExtraData1: apgArray, 
+                tooltipExtraData2: aphArray, 
+            }
+        ]
+    };
+
+   
+
+// Configuration
+const config = {
+    type: 'bar',
+    data: data,
+    options: {
+        maintainAspectRatio: false, // Set to false to allow custom width and height
+        responsive: true,
+        scales: {
+            x: {
+                stacked: true,
+            },
+            y: {
+                stacked: true,
+               
+            }
+        },
+        plugins: {
+            datalabels: {
+                anchor: 'end',
+                align: 'end',
+                formatter: function(value, context) {
+                    return value; // Display the value as label
+                }
+            },
+            legend: {
+                display: false
+            },
+            tooltip: {
+                callbacks: {
+                    title: function(tooltipItems) {
+                        let extraData = tooltipItems[0].dataset.tooltipExtraData[tooltipItems[0].dataIndex];
+                        return tooltipItems[0].label + ' - ' + extraData;
+                      },
+                    label: function(context) {
+                       // Accessing extra tooltip data
+                let extraData = context.dataset.tooltipExtraData1[context.dataIndex];
+                let extraData2 = context.dataset.tooltipExtraData2[context.dataIndex];
+                let label = context.dataset.label + ': ' + context.parsed.y;
+                // Append additional text with line break
+                label += '\nTOI: ' + extraData;
+                label += '\n+/-: ' + extraData2;
+                return label;
+                    }
+                }
+            }
+        }
+    }
+};
+
+
+
+
+
+  // Get the reference to the parent element
+var parentElement = document.getElementById('totaldefenseChart_Parent');
+
+// Check if there is an old canvas
+var oldCanvas = document.getElementById('games_played_chartDefense');
+if (oldCanvas) {
+    // If old canvas exists, remove it
+    parentElement.removeChild(oldCanvas);
+}
+
+      // Get the canvas element
+      var canvas = document.createElement('canvas');
+      canvas.id = 'games_played_chartDefense';
+      //canvas.width = 400;
+      //canvas.height = 200;
+      document.getElementById('totaldefenseChart_Parent').appendChild(canvas);
+    
+      // Get the canvas context
+      var ctx = canvas.getContext('2d');
+
+      
+
+    // Create Chart
+    var myChart = new Chart(
+        ctx,
+        config
+    );
+
+
+    
+}
+
+
+function create_defense_points_charts(defenses, colors){
+    defensePoints = [];
+
+    for (const skater of defenses) {
+        let name = skater.firstName.default + " " + skater.lastName.default;
+        let points = skater.points;
+        let position = skater.positionCode;
+        let apg = points / skater.gamesPlayed;
+        let aph = points / ((skater.gamesPlayed * (skater.avgTimeOnIcePerGame / 60)) / 60);
+        defensePoints.push({
+            label: name,
+            amount: points,
+            position: position,
+            PPG: apg.toFixed(2),
+            PPH: aph.toFixed(2)
+
+        });
+    }
+    
+    const sortedData = defensePoints.sort((a, b) => b.amount - a.amount);
+    
+    const namesArray = sortedData.map(obj => obj.label); // Corrected property name
+    const amountsArray = sortedData.map(obj => obj.amount);
+    const posArray = sortedData.map(obj => obj.position);
+    const apgArray = sortedData.map(obj => obj.PPG);
+    const aphArray = sortedData.map(obj => obj.PPH);
+
+    const data = {
+        labels: namesArray,
+        datasets: [
+            {
+                label: 'Points',
+                backgroundColor: colors.primary,
+                borderColor: colors.secondary,
+                borderWidth: 1.5,
+                data: amountsArray,
+                tooltipExtraData: posArray, 
+                tooltipExtraData1: apgArray, 
+                tooltipExtraData2: aphArray, 
+            }
+        ]
+    };
+
+   
+
+// Configuration
+const config = {
+    type: 'bar',
+    data: data,
+    options: {
+        maintainAspectRatio: false, // Set to false to allow custom width and height
+        responsive: true,
+        scales: {
+            x: {
+                stacked: true,
+            },
+            y: {
+                stacked: true,
+               
+            }
+        },
+        plugins: {
+            datalabels: {
+                anchor: 'end',
+                align: 'end',
+                formatter: function(value, context) {
+                    return value; // Display the value as label
+                }
+            },
+            legend: {
+                display: false
+            },
+            tooltip: {
+                callbacks: {
+                    title: function(tooltipItems) {
+                        let extraData = tooltipItems[0].dataset.tooltipExtraData[tooltipItems[0].dataIndex];
+                        return tooltipItems[0].label + ' - ' + extraData;
+                      },
+                    label: function(context) {
+                       // Accessing extra tooltip data
+                let extraData = context.dataset.tooltipExtraData1[context.dataIndex];
+                let extraData2 = context.dataset.tooltipExtraData2[context.dataIndex];
+                let label = context.dataset.label + ': ' + context.parsed.y;
+                // Append additional text with line break
+                label += '\nPPG: ' + extraData;
+                label += '\nPPH: ' + extraData2;
+                return label;
+                    }
+                }
+            }
+        }
+    }
+};
+
+
+
+
+
+
+  // Get the reference to the parent element
+var parentElement = document.getElementById('defensePointsChart_Parent');
+
+// Check if there is an old canvas
+var oldCanvas = document.getElementById('defenses_point_chart');
+if (oldCanvas) {
+    // If old canvas exists, remove it
+    parentElement.removeChild(oldCanvas);
+}
+
+      // Get the canvas element
+      var canvas = document.createElement('canvas');
+      canvas.id = 'defenses_point_chart';
+      //canvas.width = 400;
+      //canvas.height = 200;
+      document.getElementById('defensePointsChart_Parent').appendChild(canvas);
+    
+      // Get the canvas context
+      var ctx = canvas.getContext('2d');
+
+      
+
+    // Create Chart
+    var myChart = new Chart(
+        ctx,
+        config
+    );
+
+
+    
+}
+
+
+function create_defense_goals_charts(defenses, colors){
+    defenseGoals = [];
+
+    for (const skater of defenses) {
+        let name = skater.firstName.default + " " + skater.lastName.default;
+        let goals = skater.goals;
+        let position = skater.positionCode;
+        let apg = goals / skater.gamesPlayed;
+        let aph = goals / ((skater.gamesPlayed * (skater.avgTimeOnIcePerGame / 60)) / 60);
+        defenseGoals.push({
+            label: name,
+            amount: goals,
+            position: position,
+            goalsPerGame: apg.toFixed(2),
+            goalsPerHour: aph.toFixed(2)
+
+        });
+    }
+    
+    const sortedData = defenseGoals.sort((a, b) => b.amount - a.amount);
+    
+    const namesArray = sortedData.map(obj => obj.label); // Corrected property name
+    const amountsArray = sortedData.map(obj => obj.amount);
+    const posArray = sortedData.map(obj => obj.position);
+    const apgArray = sortedData.map(obj => obj.goalsPerGame);
+    const aphArray = sortedData.map(obj => obj.goalsPerHour);
+
+    const data = {
+        labels: namesArray,
+        datasets: [
+            {
+                label: 'Goals',
+                backgroundColor: colors.primary,
+                borderColor: colors.secondary,
+                borderWidth: 1.5,
+                data: amountsArray,
+                tooltipExtraData: posArray, 
+                tooltipExtraData1: apgArray, 
+                tooltipExtraData2: aphArray, 
+            }
+        ]
+    };
+
+// Configuration
+const config = {
+    type: 'bar',
+    data: data,
+    options: {
+        maintainAspectRatio: false, // Set to false to allow custom width and height
+        responsive: true,
+        scales: {
+            x: {
+                stacked: true,
+            },
+            y: {
+                stacked: true,
+            }
+        },
+        plugins: {
+            datalabels: {
+                anchor: 'end',
+                align: 'end',
+                formatter: function(value, context) {
+                    return value; // Display the value as label
+                }
+            },
+            legend: {
+                display: false
+            },
+            tooltip: {
+                callbacks: {
+                    title: function(tooltipItems) {
+                        let extraData = tooltipItems[0].dataset.tooltipExtraData[tooltipItems[0].dataIndex];
+                        return tooltipItems[0].label + ' - ' + extraData;
+                      },
+                    label: function(context) {
+                       // Accessing extra tooltip data
+                let extraData = context.dataset.tooltipExtraData1[context.dataIndex];
+                let extraData2 = context.dataset.tooltipExtraData2[context.dataIndex];
+                let label = context.dataset.label + ': ' + context.parsed.y;
+                // Append additional text with line break
+                label += '\nGPG: ' + extraData;
+                label += '\nGPH: ' + extraData2;
+                return label;
+                    }
+                }
+            }
+        }
+    }
+};
+  // Get the reference to the parent element
+var parentElement = document.getElementById('defenseGoalChart_Parent');
+// Check if there is an old canvas
+var oldCanvas = document.getElementById('defenses_goal_chart');
+if (oldCanvas) {
+    // If old canvas exists, remove it
+    parentElement.removeChild(oldCanvas);
+}
+      // Get the canvas element
+      var canvas = document.createElement('canvas');
+      canvas.id = 'defenses_goal_chart';
+      document.getElementById('defenseGoalChart_Parent').appendChild(canvas);
+      var ctx = canvas.getContext('2d');
+    // Create Chart
+    var myChart = new Chart(
+        ctx,
+        config
+    );
+}
+
+
+function create_defense_assist_points_charts(defenses, colors){
+    defenseAssists = [];
+
+    for (const skater of defenses) {
+        let name = skater.firstName.default + " " + skater.lastName.default;
+        let assists = skater.assists;
+        let position = skater.positionCode;
+        let apg = assists / skater.gamesPlayed;
+        let aph = assists / ((skater.gamesPlayed * (skater.avgTimeOnIcePerGame / 60)) / 60);
+        defenseAssists.push({
+            label: name,
+            amount: assists,
+            position: position,
+            APG: apg.toFixed(2),
+            APH: aph.toFixed(2)
+
+        });
+    }
+    
+    const sortedData = defenseAssists.sort((a, b) => b.amount - a.amount);
+    
+    const namesArray = sortedData.map(obj => obj.label); // Corrected property name
+    const amountsArray = sortedData.map(obj => obj.amount);
+    const posArray = sortedData.map(obj => obj.position);
+    const apgArray = sortedData.map(obj => obj.APG);
+    const aphArray = sortedData.map(obj => obj.APH);
+
+    const data = {
+        labels: namesArray,
+        datasets: [
+            {
+                label: 'Assists',
+                backgroundColor: colors.primary,
+                borderColor: colors.secondary,
+                borderWidth: 1.5,
+                data: amountsArray,
+                tooltipExtraData: posArray, 
+                tooltipExtraData1: apgArray, 
+                tooltipExtraData2: aphArray, 
+            }
+        ]
+    };
+
+   
+
+// Configuration
+const config = {
+    type: 'bar',
+    data: data,
+    options: {
+        maintainAspectRatio: false, // Set to false to allow custom width and height
+        responsive: true,
+        scales: {
+            x: {
+                stacked: true,
+            },
+            y: {
+                stacked: true,
+               
+            }
+        },
+        plugins: {
+            datalabels: {
+                anchor: 'end',
+                align: 'end',
+                formatter: function(value, context) {
+                    return value; // Display the value as label
+                }
+            },
+            legend: {
+                display: false
+            },
+            tooltip: {
+                callbacks: {
+                    title: function(tooltipItems) {
+                        let extraData = tooltipItems[0].dataset.tooltipExtraData[tooltipItems[0].dataIndex];
+                        return tooltipItems[0].label + ' - ' + extraData;
+                      },
+                    label: function(context) {
+                       // Accessing extra tooltip data
+                let extraData = context.dataset.tooltipExtraData1[context.dataIndex];
+                let extraData2 = context.dataset.tooltipExtraData2[context.dataIndex];
+                let label = context.dataset.label + ': ' + context.parsed.y;
+                // Append additional text with line break
+                label += '\nAPG: ' + extraData;
+                label += '\nAPH: ' + extraData2;
+                return label;
+                    }
+                }
+            }
+        }
+    }
+};
+
+
+
+
+
+
+
+  // Get the reference to the parent element
+var parentElement = document.getElementById('defenseAssistsChart_Parent');
+
+// Check if there is an old canvas
+var oldCanvas = document.getElementById('defenses_Assists_chart');
+if (oldCanvas) {
+    // If old canvas exists, remove it
+    parentElement.removeChild(oldCanvas);
+}
+
+      // Get the canvas element
+      var canvas = document.createElement('canvas');
+      canvas.id = 'defenses_Assists_chart';
+      //canvas.width = 400;
+      //canvas.height = 200;
+      document.getElementById('defenseAssistsChart_Parent').appendChild(canvas);
+    
+      // Get the canvas context
+      var ctx = canvas.getContext('2d');
+
+      
+
+    // Create Chart
+    var myChart = new Chart(
+        ctx,
+        config
+    );
+
+
+    
+}
+
+
+function create_defense_shot_points_charts(defenses, colors){
+    defenseShots = [];
+
+    for (const skater of defenses) {
+        let name = skater.firstName.default + " " + skater.lastName.default;
+        let shots = skater.shots;
+        let position = skater.positionCode;
+        let apg = skater.shootingPctg * 100;
+        let aph = shots / ((skater.gamesPlayed * (skater.avgTimeOnIcePerGame / 60)) / 60);
+        defenseShots.push({
+            label: name,
+            amount: shots,
+            position: position,
+            SP: apg.toFixed(1),
+            SPH: aph.toFixed(2)
+
+        });
+    }
+    
+    const sortedData = defenseShots.sort((a, b) => b.amount - a.amount);
+    
+    const namesArray = sortedData.map(obj => obj.label); // Corrected property name
+    const amountsArray = sortedData.map(obj => obj.amount);
+    const posArray = sortedData.map(obj => obj.position);
+    const apgArray = sortedData.map(obj => obj.SP);
+    const aphArray = sortedData.map(obj => obj.SPH);
+
+    const data = {
+        labels: namesArray,
+        datasets: [
+            {
+                label: 'Shots',
+                backgroundColor: colors.primary,
+                borderColor: colors.secondary,
+                borderWidth: 1.5,
+                data: amountsArray,
+                tooltipExtraData: posArray, 
+                tooltipExtraData1: apgArray, 
+                tooltipExtraData2: aphArray, 
+            }
+        ]
+    };
+
+   
+
+// Configuration
+const config = {
+    type: 'bar',
+    data: data,
+    options: {
+        maintainAspectRatio: false, // Set to false to allow custom width and height
+        responsive: true,
+        scales: {
+            x: {
+                stacked: true,
+            },
+            y: {
+                stacked: true,
+               
+            }
+        },
+        plugins: {
+            datalabels: {
+                anchor: 'end',
+                align: 'end',
+                formatter: function(value, context) {
+                    return value; // Display the value as label
+                }
+            },
+            legend: {
+                display: false
+            },
+            tooltip: {
+                callbacks: {
+                    title: function(tooltipItems) {
+                        let extraData = tooltipItems[0].dataset.tooltipExtraData[tooltipItems[0].dataIndex];
+                        return tooltipItems[0].label + ' - ' + extraData;
+                      },
+                    label: function(context) {
+                       // Accessing extra tooltip data
+                let extraData = context.dataset.tooltipExtraData1[context.dataIndex];
+                let extraData2 = context.dataset.tooltipExtraData2[context.dataIndex];
+                let label = context.dataset.label + ': ' + context.parsed.y;
+                // Append additional text with line break
+                label += '\nS: ' + extraData + "%";
+                label += '\nSPH: ' + extraData2;
+                return label;
+                    }
+                }
+            }
+        }
+    }
+};
+
+
+
+
+
+  // Get the reference to the parent element
+var parentElement = document.getElementById('defenseShotsChart_Parent');
+
+// Check if there is an old canvas
+var oldCanvas = document.getElementById('defenses_Shots_chart');
+if (oldCanvas) {
+    // If old canvas exists, remove it
+    parentElement.removeChild(oldCanvas);
+}
+
+      // Get the canvas element
+      var canvas = document.createElement('canvas');
+      canvas.id = 'defenses_Shots_chart';
+      //canvas.width = 400;
+      //canvas.height = 200;
+      document.getElementById('defenseShotsChart_Parent').appendChild(canvas);
     
       // Get the canvas context
       var ctx = canvas.getContext('2d');

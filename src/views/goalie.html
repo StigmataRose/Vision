@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            background-color: white;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+    <link rel="stylesheet" href="../styles.css">
+
+    <style>
+       
+        .overlay {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background-color: rgba(0, 0, 0, 0.5);
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          z-index: 9999;
+        }
+        
+        .tutorial-box {
+          background-color: #fff;
+          border-radius: 10px;
+          padding: 20px;
+          max-width: 80%;
+          text-align: center;
+          position: relative;
+        }
+        
+        .close-button {
+          position: absolute;
+          top: 10px;
+          right: 10px;
+          cursor: pointer;
+        }
+
+        .notes-section {
+    margin-top: 20px;
+  }
+  
+  .notes-title {
+    font-weight: bold;
+    text-align: center;
+  }
+
+  #canvasContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100vh;
+  }
+
+  canvas {
+    
+    background-image: url('../assets/rink.png');
+    background-size: cover;
+  }
+  
+      </style>
+
+</head>
+<body>
+    <div class="video-container">
+        <video autoplay loop muted>
+            <source src="../assets/nhllogo.mp4" type="video/mp4">
+        </video>
+    </div>
+    
+    <div class="section-title">
+       
+    </div>
+
+  
+    <style>
+        .schedule_games {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+
+<div id="schedule_games"></div>
+   
+
+<div class="overlay">
+  <div class="tutorial-box">
+    <h2>Tutorial</h2>
+    <p>Step 1: Drag and Drop files around like a Desktop.</p>
+    <p>Step 2: Right Click to export files to actual Desktop.</p>
+    <p>Step 3: Use the menu to navigate other real-time stats from NHL api.</p>
+
+    <div class="notes-section">
+        <p class="notes-title">Notes</p>
+        <p style="font-style: italic;">I believe implementing a desktop environment would enhance communication within the team and with individuals outside of hockey operations. Additionally, given more time, integrating features such as file notifications and the ability to save sessions or generate reports would further improve efficiency and functionality between different users. If the app is called Vision it only makes sense that this would be your Vision Board.</p>
+      </div>
+
+    <button class="close-button" onclick="closeTutorial()">Close</button>
+  </div>
+</div>
+
+<script>
+  function closeTutorial() {
+    var overlay = document.querySelector('.overlay');
+    overlay.style.display = 'none';
+  }
+</script>
+
+
+
+<div id="canvasContainer">
+  <canvas id="myCanvas"></canvas>
+</div>
+
+
+
+
+<script>
+var canvas = document.getElementById('myCanvas');
+var ctx = canvas.getContext('2d');
+
+// Function to resize canvas based on screen size
+function resizeCanvas() {
+var screenWidth = window.innerWidth * 0.9;
+var screenHeight = window.innerHeight * 0.9;
+
+// Calculate canvas size while maintaining aspect ratio
+var canvasWidth, canvasHeight;
+var aspectRatio = 1732 / 737; // Aspect ratio of original canvas size
+
+if (screenWidth / screenHeight > aspectRatio) {
+  // Screen is wider
+  canvasWidth = screenHeight * aspectRatio;
+  canvasHeight = screenHeight;
+} else {
+  // Screen is taller or has equal aspect ratio
+  canvasWidth = screenWidth;
+  canvasHeight = screenWidth / aspectRatio;
+}
+
+canvas.width = canvasWidth;
+canvas.height = canvasHeight;
+
+// Redraw circle
+drawCircle();
+}
+
+// Function to draw the circle
+function drawCircle() {
+var centerX = 90;
+var centerY = -18;
+var normalizedX = ((canvas.width * 0.5) * (centerX * 0.01)) + (canvas.width * 0.5);
+var normalizedY = (canvas.height * 0.5) - ((canvas.height * 0.5) * (centerY * 0.01));
+var radius = 5; // Set radius to 10
+var circleColor = 'blue'; // Set circle color to blue
+
+ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear canvas
+ctx.beginPath();
+ctx.arc(normalizedX, normalizedY, radius, 0, 2 * Math.PI);
+ctx.fillStyle = circleColor; // Set circle fill color
+ctx.fill(); // Fill circle with color
+ctx.strokeStyle = "black"; // Set outline color
+ctx.lineWidth = 1.5; // Set outline width
+ctx.stroke(); // Draw outline
+}
+
+// Initial resize
+resizeCanvas();
+
+// Listen for window resize events
+window.addEventListener('resize', resizeCanvas);
+</script>
+
+<!-- <script>
+    fillTables();
+</script> -->
+<script src="../chart.js"></script>
+<script src="../main.js"></script>
+</body>
+</html>

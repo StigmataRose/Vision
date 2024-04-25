@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Full-screen WebGL Blue Scene</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+        canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="webglCanvas"></canvas>
+
+    <script>
+        // WebGL initialization
+        var canvas = document.getElementById("webglCanvas");
+        var gl = canvas.getContext("webgl");
+        if (!gl) {
+            console.error("WebGL not supported, falling back on experimental-webgl");
+            gl = canvas.getContext("experimental-webgl");
+        }
+
+        // Define vertex shader
+        var vertexShaderSource = `
+            attribute vec4 a_position;
+            void main() {
+                gl_Position = a_position;
+            }`;
+
+     // Define fragment shader
+var fragmentShaderSource = `
+#ifdef GL_ES
+precision mediump float;
+#endif
+
+uniform float time;
+uniform vec2 mouse;
+uniform vec2 resolution;
+
+float map(vec3 p) {
+    return length(p) - 1.0; // distance to a sphere of radius 1
+}
+
+void mainImage(out vec4 fragColor, in vec2 fragCoord) {
+    vec2 uv = (2.0 * fragCoord - resolution) / resolution.y;
+
+    // Initialization
+    vec3 ro = vec3(0.0, 0.0, -3.0);          // ray origin
+    vec3 rd = normalize(vec3(uv, 1.0));      // ray direction
+    vec3 col = vec3(0.0);                    // final pixel color
+
+    float t = 0.0; // total distance travelled
+
+    // Raymarching
+    for (int i = 0; i < 80; i++) {
+        vec3 p = ro + rd * t;     // position along the ray
+
+        float d = map(p);         // current distance to the scene
+
+        t += d;                   // "march" the ray
+
+        if (d < 0.001) break;     // early stop if close enough
+        if (t > 100.0) break;     // early stop if too far
+    }
+
+    // Coloring
+    col = vec3(t * 0.2);         // color based on distance
+
+    fragColor = vec4(col, 1.0);
+}
+
+void main(void) {
+    mainImage(gl_FragColor, gl_FragCoord.xy);
+}
+`;
+
+
+        // Compile shader
+        function compileShader(gl, source, type) {
+            var shader = gl.createShader(type);
+            gl.shaderSource(shader, source);
+            gl.compileShader(shader);
+            if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+                console.error("An error occurred compiling the shaders: " + gl.getShaderInfoLog(shader));
+                gl.deleteShader(shader);
+                return null;
+            }
+            return shader;
+        }
+
+        var vertexShader = compileShader(gl, vertexShaderSource, gl.VERTEX_SHADER);
+        var fragmentShader = compileShader(gl, fragmentShaderSource, gl.FRAGMENT_SHADER);
+
+        // Create and link the shader program
+        var shaderProgram = gl.createProgram();
+        gl.attachShader(shaderProgram, vertexShader);
+        gl.attachShader(shaderProgram, fragmentShader);
+        gl.linkProgram(shaderProgram);
+        if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)) {
+            console.error("Unable to initialize the shader program: " + gl.getProgramInfoLog(shaderProgram));
+        }
+
+        // Use the shader program
+        gl.useProgram(shaderProgram);
+
+        // Set up the geometry
+        var positionBuffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+        var positions = [
+            -1, -1,
+            1, -1,
+            -1, 1,
+            1, -1,
+            1, 1,
+            -1, 1
+        ];
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
+
+        var positionAttributeLocation = gl.getAttribLocation(shaderProgram, "a_position");
+        gl.enableVertexAttribArray(positionAttributeLocation);
+        gl.vertexAttribPointer(positionAttributeLocation, 2, gl.FLOAT, false, 0, 0);
+
+        // Set viewport to fill the entire canvas
+        gl.viewport(0, 0, canvas.width, canvas.height);
+
+        // Clear the canvas to blue
+        gl.clearColor(0.0, 0.0, 1.0, 1.0); // Blue color
+        gl.clear(gl.COLOR_BUFFER_BIT);
+
+    </script>
+</body>
+</html>

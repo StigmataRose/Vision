@@ -12,6 +12,7 @@
   }
 </style>
 <link rel="stylesheet" href="../styles.css">
+<script src="../chart.js"></script>
 </head>
 <body>
   <div class="video-container">
@@ -31,6 +32,15 @@
         justify-content: center;
         align-items: center;
     }
+
+    .ChartStyle {
+    width: 90%;
+    height: 264px;
+    margin: 0 auto; /* This centers the element horizontally */
+    padding-top: 10px;
+    padding-bottom: 50px;
+    display: block;
+}
 </style>
 
 <div id="schedule_games"></div>
@@ -40,46 +50,20 @@
 
 <div id="standings"></div>
   
-
-
 <div id="league_chart"></div>
+<div class="ChartStyle" id="League_Chart_Parent"></div>
 
-<div id="league_wins_losses" style="height: 250px;" style="width: 100%;">
-<!-- The chart will be populated here -->
-<canvas id="league_wins_losses_chart" width="100%" height="200"></canvas>
-
-
-</div>
+<div id="differ_chart"></div>
+<div class="ChartStyle" id="Differ_Chart_Parent"></div>
 
 <div id="home_chart"></div>
-
-<div id="home_wins_losses" style="height: 250px;" style="width: 100%;">
-<!-- The chart will be populated here -->
-<canvas id="home_wins_losses_chart" width="100%" height="200"></canvas>
-
-
-</div>
-
-</div>
+<div class="ChartStyle" id="Home_Chart_Parent"></div>
 
 <div id="away_chart"></div>
+<div class="ChartStyle" id="Away_Chart_Parent"></div>
 
-<div id="away_wins_losses" style="height: 250px;" style="width: 100%;">
-<!-- The chart will be populated here -->
-<canvas id="away_wins_losses_chart" width="100%" height="200"></canvas>
-
-
-</div>
-
-
-<div id="differ_chart" style="width: 100%;"></div>
-
-<div id="differ_wins_losses" style="height: 250px;" style="width: 100%;">
-<!-- The chart will be populated here -->
-<canvas id="differ_wins_losses_chart" width="100%" height="200"></canvas>
-
-
-</div>
+<div id="last10_chart"></div>
+<div class="ChartStyle" id="Last10_Chart_Parent"></div>
 
 
 <style>
@@ -147,7 +131,17 @@ display: inline-block;
 }
 </style>
 
-<script src="../chart.js"></script>
+<!-- <script>
+  function loadCall() {
+    chartTitles();
+      createStandingsTable();
+      display_league_info();
+      display_home_info();
+      display_away_info();
+      display_differ_info();
+  }
+</script> -->
+
 <script src="scripts/standings.js"></script>
 </body>
 </html>

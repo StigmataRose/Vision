@@ -3,82 +3,88 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Blue Background Template</title>
+<title>Circle on Canvas</title>
 <style>
-  body {
-    background-color: white;
-    color: white; /* Set text color to white for better contrast */
-    font-family: Arial, sans-serif; /* Use Arial font */
-    margin: 0; /* Remove default body margin */
-    padding: 0; /* Remove default body padding */
+  #canvasContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100vh;
   }
 
-  /* Style the content area */
-  .content {
-    padding: 20px; /* Add padding to content area */
-    text-align: center; /* Center-align content */
-  }
-</style>
-
-<script src="../chart.js"></script>
-
-<style>
-
+  canvas {
     
-    canvas#myChart {
-      margin: 5%;
-    }
-    </style>
-
+    background-image: url('../assets/rink.png');
+    background-size: cover;
+  }
+  
+</style>
 </head>
 <body>
 
-<div class="content">
-  <h1>Leaders</h1>
-  <p>This is a basic HTML template with a blue background.</p>
-</div>
+ 
+    <div id="canvasContainer">
+      <canvas id="myCanvas"></canvas>
+    </div>
 
 
 
-<canvas id="myChart" width="400" height="200"></canvas>
 
 <script>
-// Sample data for the chart
-var data = {
-    labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-    datasets: [{
-        label: 'My First Dataset',
-        data: [12, 19, 3, 5, 2, 3],
-        backgroundColor: [
-            'rgba(255, 99, 132, 0.2)',
-            'rgba(54, 162, 235, 0.2)',
-            'rgba(255, 206, 86, 0.2)',
-            'rgba(75, 192, 192, 0.2)',
-            'rgba(153, 102, 255, 0.2)',
-            'rgba(255, 159, 64, 0.2)'
-        ],
-        borderColor: [
-            'rgba(255, 99, 132, 1)',
-            'rgba(54, 162, 235, 1)',
-            'rgba(255, 206, 86, 1)',
-            'rgba(75, 192, 192, 1)',
-            'rgba(153, 102, 255, 1)',
-            'rgba(255, 159, 64, 1)'
-        ],
-        borderWidth: 1
-    }]
-};
+  var canvas = document.getElementById('myCanvas');
+  var ctx = canvas.getContext('2d');
 
-// Get the canvas element
-var ctx = document.getElementById('myChart').getContext('2d');
+  // Function to resize canvas based on screen size
+  function resizeCanvas() {
+    var screenWidth = window.innerWidth * 0.9;
+    var screenHeight = window.innerHeight * 0.9;
+    
+    // Calculate canvas size while maintaining aspect ratio
+    var canvasWidth, canvasHeight;
+    var aspectRatio = 1732 / 737; // Aspect ratio of original canvas size
 
-// Create the chart
-var myChart = new Chart(ctx, {
-    type: 'bar',
-    data: data
-});
+    if (screenWidth / screenHeight > aspectRatio) {
+      // Screen is wider
+      canvasWidth = screenHeight * aspectRatio;
+      canvasHeight = screenHeight;
+    } else {
+      // Screen is taller or has equal aspect ratio
+      canvasWidth = screenWidth;
+      canvasHeight = screenWidth / aspectRatio;
+    }
 
+    canvas.width = canvasWidth;
+    canvas.height = canvasHeight;
+
+    // Redraw circle
+    drawCircle();
+  }
+
+  // Function to draw the circle
+  function drawCircle() {
+    var centerX = 90;
+    var centerY = -18;
+    var normalizedX = ((canvas.width * 0.5) * (centerX * 0.01)) + (canvas.width * 0.5);
+    var normalizedY = (canvas.height * 0.5) - ((canvas.height * 0.5) * (centerY * 0.01));
+    var radius = 5; // Set radius to 10
+    var circleColor = 'blue'; // Set circle color to blue
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear canvas
+    ctx.beginPath();
+  ctx.arc(normalizedX, normalizedY, radius, 0, 2 * Math.PI);
+  ctx.fillStyle = circleColor; // Set circle fill color
+  ctx.fill(); // Fill circle with color
+  ctx.strokeStyle = "black"; // Set outline color
+  ctx.lineWidth = 1.5; // Set outline width
+  ctx.stroke(); // Draw outline
+  }
+
+  // Initial resize
+  resizeCanvas();
+
+  // Listen for window resize events
+  window.addEventListener('resize', resizeCanvas);
 </script>
-
 </body>
 </html>

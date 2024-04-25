@@ -287,7 +287,7 @@ function createStandingsTable() {
     
     function chartTitles(){
       // Call the function to create the underlined title
-    var underlinedTitle = createUnderlinedTitle("Wins and Losses");
+    var underlinedTitle = createUnderlinedTitle("Win and Loss");
     underlinedTitle.style.fontSize = "20px";
     underlinedTitle.style.fontWeight = "bold";
     underlinedTitle.style.marginTop = "10px";
@@ -317,7 +317,7 @@ function createStandingsTable() {
     // Append the created underlined title to the chart div
     awayDiv.appendChild(underline_away_title);
 
-    var underline_differ_title = createUnderlinedTitle("Goal Differential (G & %)");
+    var underline_differ_title = createUnderlinedTitle("Goal Differential");
     underline_differ_title.style.fontSize = "20px";
     underline_differ_title.style.fontWeight = "bold";
     underline_differ_title.style.marginTop = "10px";
@@ -326,333 +326,531 @@ function createStandingsTable() {
     
     // Append the created underlined title to the chart div
     differDiv.appendChild(underline_differ_title);
+
+    var underline_L10_title = createUnderlinedTitle("Last 10");
+    underline_L10_title.style.fontSize = "20px";
+    underline_L10_title.style.fontWeight = "bold";
+    underline_L10_title.style.marginTop = "10px";
+    // Get a reference to the div with the id "chart_wins_losses"
+    var L10Div = document.getElementById("last10_chart");
+    
+    // Append the created underlined title to the chart div
+    L10Div.appendChild(underline_L10_title);
     }
     
-    function populate_league_win_loss() {
+  
+    // document.addEventListener("DOMContentLoaded", createStandingsTable);
+    // document.addEventListener("DOMContentLoaded", populate_league_win_loss);
+    // document.addEventListener("DOMContentLoaded", populate_home_win_loss);
+    // document.addEventListener("DOMContentLoaded", populate_away_win_loss);
+    // document.addEventListener("DOMContentLoaded", populate_differ_chart);
+   
     
-      var abb_array = [];
-      var wins_array = [];
-      var losses_array = [];
+    document.addEventListener('DOMContentLoaded', function() {
+      // Example usage:
+      //console.log('DOM loaded');
+      
+      chartTitles();
+      createStandingsTable();
+      display_charts();
+      // display_league_info();
+      // display_home_info();
+      // display_away_info();
+      // display_differ_info();
+  });
 
-    
-      invoke('return_league_standings').then((league) => {
-       
-        for (var i = 0; i < league.length; i++) {
-          let label = league[i].teamAbbrev.default;
-          let wins = league[i].wins;
-          let losses = league[i].losses;
+  function display_charts(){
+
+    invoke('return_league_standings').then((league) => {
      
-          abb_array.push(label);
-          wins_array.push(wins);
-          losses_array.push(losses);
-          
-      }
-    }).catch(error => {
-      // Handle error here
-      console.error(error);
-    });
-    
-    
-      // Create a script element for chart.js
-      var chartScript = document.createElement('script');
-      chartScript.src = '../chart.js';
-      // Sample data for the chart
-         // Sample data for the chart
-         
-         var win_color_b = hexToRgba(getTeamColors("Nashville Predators").secondary_color,1.0);
-         var loss_color_b = hexToRgba(getTeamColors("Nashville Predators").primary_color,1.0);
-    
-         var win_color = hexToRgba(getTeamColors("Nashville Predators").secondary_color,0.7);
-         var loss_color = hexToRgba(getTeamColors("Nashville Predators").primary_color,0.7);
-         var data = {
-          labels: abb_array,
-          datasets: [{
-              label: 'Wins',
-              data: wins_array,
-              backgroundColor: win_color,
-              borderColor: win_color_b,
-              borderWidth: 1
-          },
-          {
-              label: 'Losses',
-              data: losses_array,
-              backgroundColor: loss_color,
-              borderColor: loss_color_b,
-              borderWidth: 1
-          }]
-      };
-    
-      // Get the canvas element
-      var canvas = document.createElement('canvas');
-      canvas.id = 'homeWinsAndLossesChart';
-    
-      
-      //canvas.width = 400;
-      //canvas.height = 200;
-      document.getElementById('league_wins_losses').appendChild(canvas);
-    
-      // Get the canvas context
-      var ctx = canvas.getContext('2d');
-    
-      // Create the chart
-      var myChart = new Chart(ctx, {
-          type: 'bar',
-          data: data,
-          options: {
-              scales: {
-                  x: {
-                      stacked: true
-                  },
-                  y: {
-                      stacked: true,
-                      ticks: {
-                        beginAtZero: true,
-                    },
-                    min: 0,
-                    max: 82
-                  }
-              },
-              responsive: true, // Allow chart to resize
-              maintainAspectRatio: false
-          }
-      });
-    
-      //canvas.style.margin = '0 auto';
-      //canvas.style.width = '100%';
+      let league_records = [];
+      let home_records = [];
+      let away_records = [];
+      let differ_array = [];
 
-     
-    }
-    
+      let last10_array = [];
 
-    function populate_home_win_loss() {
-    
-        var abb_array = [];
-        var wins_array = [];
-        var losses_array = [];
-       
-        invoke('return_home_standings').then((league) => {
-         
-          for (var i = 0; i < league.length; i++) {
-            let label = league[i].teamAbbrev.default;
-            let wins = league[i].homeWins;
-            let losses = league[i].homeLosses;
-       
-            abb_array.push(label);
-            wins_array.push(wins);
-            losses_array.push(losses);
-        }
-      }).catch(error => {
-        console.error(error);
-      });
-  
-        var chartScript = document.createElement('script2');
-        chartScript.src = '../chart.js';
-  
-           var win_color_b = hexToRgba(getTeamColors("Nashville Predators").secondary_color,1.0);
-           var loss_color_b = hexToRgba(getTeamColors("Nashville Predators").primary_color,1.0);
-      
-           var win_color = hexToRgba(getTeamColors("Nashville Predators").secondary_color,0.7);
-           var loss_color = hexToRgba(getTeamColors("Nashville Predators").primary_color,0.7);
-           var data = {
-            labels: abb_array,
-            datasets: [{
-                label: 'Wins',
-                data: wins_array,
-                backgroundColor: win_color,
-                borderColor: win_color_b,
-                borderWidth: 1
-            },
-            {
-                label: 'Losses',
-                data: losses_array,
-                backgroundColor: loss_color,
-                borderColor: loss_color_b,
-                borderWidth: 1
-            }]
-        };
-      
-        // Get the canvas element
-        var canvas = document.createElement('canvas');
-        canvas.id = 'homeWinsAndLossesChart2';
-        //canvas.width = 400;
-        //canvas.height = 200;
-        document.getElementById('home_wins_losses').appendChild(canvas);
-      
-        // Get the canvas context
-        var ctx = canvas.getContext('2d');
-      
-        // Create the chart
-        var myChart = new Chart(ctx, {
-            type: 'bar',
-            data: data,
-            options: {
-                plugins: {
-                    legend: {
-                        display: false
-                    },
-                },
-                scales: {
-                    x: {
-                        stacked: true
-                    },
-                    y: {
-                        stacked: true,
-                        ticks: {
-                          beginAtZero: true,
-                      },
-                      min: 0,
-                      max: 41
-                    }
-                },
-                responsive: true, // Allow chart to resize
-                maintainAspectRatio: false
-            }
+      for (var i = 0; i < league.length; i++) {
+        let label = league[i].teamAbbrev.default;
+        let wins = league[i].wins;
+        let losses = league[i].losses;
+
+        let full = league[i].teamName.default;
+        let common = league[i].teamCommonName.default;
+        let x = league[i].goalDifferential;
+        let y = league[i].goalsForPctg;
+        let z = league[i].goalsForPctg;
+
+        let home_wins = league[i].homeWins;
+        let home_losses = league[i].homeLosses;
+
+        let away_wins = league[i].roadWins;
+        let away_losses = league[i].roadLosses;
+
+        let L10wins = league[i].l10Wins;
+        let L10losses = league[i].l10Losses;
+
+        league_records.push({
+          label: label,
+          wins: wins,
+          losses: losses
         });
-      
-        //canvas.style.margin = '0 auto';
-        //canvas.style.width = '100%';
-      }
 
-      function populate_away_win_loss() {
-    
-        var abb_array = [];
-        var wins_array = [];
-        var losses_array = [];
-       
-        invoke('return_away_standings').then((league) => {
-         
-          for (var i = 0; i < league.length; i++) {
-            let label = league[i].teamAbbrev.default;
-            let wins = league[i].roadWins;
-            let losses = league[i].roadLosses;
-       
-            abb_array.push(label);
-            wins_array.push(wins);
-            losses_array.push(losses);
-        }
-      }).catch(error => {
-        console.error(error);
-      });
-  
-        var chartScript = document.createElement('script2');
-        chartScript.src = '../chart.js';
-  
-           var win_color_b = hexToRgba(getTeamColors("Nashville Predators").secondary_color,1.0);
-           var loss_color_b = hexToRgba(getTeamColors("Nashville Predators").primary_color,1.0);
-      
-           var win_color = hexToRgba(getTeamColors("Nashville Predators").secondary_color,0.7);
-           var loss_color = hexToRgba(getTeamColors("Nashville Predators").primary_color,0.7);
-           var data = {
-            labels: abb_array,
-            datasets: [{
-                label: 'Wins',
-                data: wins_array,
-                backgroundColor: win_color,
-                borderColor: win_color_b,
-                borderWidth: 1
-            },
-            {
-                label: 'Losses',
-                data: losses_array,
-                backgroundColor: loss_color,
-                borderColor: loss_color_b,
-                borderWidth: 1
-            }]
-        };
-      
-        // Get the canvas element
-        var canvas = document.createElement('canvas');
-        canvas.id = 'awayWinsAndLossesChart2';
-        //canvas.width = 400;
-        //canvas.height = 200;
-        document.getElementById('away_wins_losses').appendChild(canvas);
-      
-        // Get the canvas context
-        var ctx = canvas.getContext('2d');
-      
-        // Create the chart
-        var myChart = new Chart(ctx, {
-            type: 'bar',
-            data: data,
-            options: {
-                plugins: {
-                    legend: {
-                        display: false
-                    },
-                },
-                scales: {
-                    x: {
-                        stacked: true
-                    },
-                    y: {
-                        stacked: true,
-                        ticks: {
-                          beginAtZero: true,
-                      },
-                      min: 0,
-                      max: 41
-                    }
-                },
-                responsive: true, // Allow chart to resize
-                maintainAspectRatio: false
-            }
+        differ_array.push({
+          full: full,
+          common: common,
+          x: x,
+          y: y,
+          z: z});
+
+        home_records.push({
+          label: label,
+          wins: home_wins,
+          losses: home_losses
         });
-      
-        //canvas.style.margin = '0 auto';
-        //canvas.style.width = '100%';
-      }
-      // Call the function to populate the div with id "homeWins"
-      
-class BubbleSet {
-    constructor(label, data, backgroundColor, borderColor) {
-        this.label = label;
-         this.data = data;
-         this.backgroundColor = backgroundColor;
-         this.borderColor = borderColor;
-     }
-}
 
-function populate_differ_chart() {
+        away_records.push({
+          label: label,
+          wins: away_wins,
+          losses: away_losses
+        });
 
-
-     // array for bubble chart
-
-     var datasets = [];
-
-     invoke('return_league_standings').then((league) => {
-      
+        last10_array.push({
+            label: label,
+            wins: L10wins,
+            losses: L10losses
+          });
         
-        for (var i = 0; i < league.length; i++) {
-         // for bubble chart
-         let full = league[i].teamName.default;
-         let common = league[i].teamCommonName.default;
-         let dif = league[i].goalDifferential;
-         let perc = league[i].goalsForPctg;
+    }
 
-        // console.log("Full Name:", full);
-         let dataset = {
-            label: common,
-            data: [{ x: dif, y: perc, r: perc }],
-            backgroundColor: hexToRgba(getTeamColors(full).primary_color,1.0),
-            borderColor: hexToRgba(getTeamColors(full).secondary_color,1.0)
-        };
+    display_league_info(league_records);
+    display_differ_info(differ_array);
+
+    const sortedHome = home_records.sort((a, b) => b.wins - a.wins);
+    display_home_info(sortedHome);
+    const sortedAway = away_records.sort((a, b) => b.wins - a.wins);
+    display_away_info(sortedAway);
+
+    const sortedL10 = last10_array.sort((a, b) => b.wins - a.wins);
+    display_L10_info(sortedL10);
+   
+
+  }).catch(error => {
+    // Handle error here
+    console.error(error);
+  });
+  
+  }
+
+  function display_league_info(league){
+    var abb_array = [];
+    var wins_array = [];
+    var losses_array = [];
+
+  
+  
+      for (var i = 0; i < league.length; i++) {
+        abb_array.push(league[i].label);
+        wins_array.push(league[i].wins);
+        losses_array.push(league[i].losses);
+        
+    }
+
+
+    // Create a script element for chart.js
+    // var chartScript = document.createElement('script');
+    // chartScript.src = '../chart.js';
+    // Sample data for the chart
+       // Sample data for the chart
+       
+   
+       var win_color_b = hexToRgba("#041E42",1.0);
+       var loss_color_b = hexToRgba("#FFB81C",1.0);
+  
+       var win_color = hexToRgba("#041E42",0.7);
+       var loss_color = hexToRgba("#FFB81C",0.7);
+       var data = {
+        labels: abb_array,
+        datasets: [{
+            label: 'Wins',
+            data: wins_array,
+            backgroundColor: win_color,
+            borderColor: win_color_b,
+            borderWidth: 1
+        },
+        {
+            label: 'Losses',
+            data: losses_array,
+            backgroundColor: loss_color,
+            borderColor: loss_color_b,
+            borderWidth: 1
+        }]
+    };
+  
+
+     // Get the reference to the parent element
+     var parentElement = document.getElementById('League_Chart_Parent');
+     // Check if there is an old canvas
+     var oldCanvas = document.getElementById('leagueWinsAndLossesCanvas');
+     if (oldCanvas) {
+         // If old canvas exists, remove it
+         parentElement.removeChild(oldCanvas);
+     }
+
+    // Get the canvas element
+    var canvas = document.createElement('canvas');
+    canvas.id = 'leagueWinsAndLossesCanvas';
+  
     
-        // Output the values to the console
+    //canvas.width = 400;
+    //canvas.height = 200;
+    document.getElementById('League_Chart_Parent').appendChild(canvas);
+  
+    // Get the canvas context
+    var ctx = canvas.getContext('2d');
+  
+    // Create the chart
+    var myChart = new Chart(ctx, {
+        type: 'bar',
+        data: data,
+        options: {
+            scales: {
+                x: {
+                    stacked: true
+                },
+                y: {
+                    stacked: true,
+                    ticks: {
+                      beginAtZero: true,
+                  },
+                  min: 0,
+                  max: 82
+                }
+            },
+            responsive: true, // Allow chart to resize
+            maintainAspectRatio: false
+        }
+    });
+
+
+  }
+
+  function display_home_info(league){
+    var abb_array = [];
+    var wins_array = [];
+    var losses_array = [];
+ 
+ 
+      for (var i = 0; i < league.length; i++) {
+
+        abb_array.push(league[i].label);
+        wins_array.push(league[i].wins);
+        losses_array.push(league[i].losses);
+     
+    }
+
+    // var chartScript = document.createElement('script2');
+    // chartScript.src = '../chart.js';
+
+    var win_color_b = hexToRgba("#041E42",1.0);
+    var loss_color_b = hexToRgba("#FFB81C",1.0);
+
+    var win_color = hexToRgba("#041E42",0.7);
+    var loss_color = hexToRgba("#FFB81C",0.7);
+
+     //  var teamColors = generatePrimaryTeamColors(teamName_array);
+      // var teamColors2 = generateSecondaryTeamColors(teamName_array);
+
+       var data = {
+        labels: abb_array,
+        datasets: [{
+            label: 'Wins',
+            data: wins_array,
+            backgroundColor: win_color,
+            borderColor: win_color_b,
+            borderWidth: 1
+        },
+        {
+            label: 'Losses',
+            data: losses_array,
+            backgroundColor: loss_color,
+            borderColor: loss_color_b,
+            borderWidth: 1
+        }]
+    };
+
+    // Get the reference to the parent element
+    var parentElement = document.getElementById('Home_Chart_Parent');
+    // Check if there is an old canvas
+    var oldCanvas = document.getElementById('homeChartCanvas');
+    if (oldCanvas) {
+        // If old canvas exists, remove it
+        parentElement.removeChild(oldCanvas);
+    }
+
+    // Get the canvas element
+    var canvas = document.createElement('canvas');
+    canvas.id = 'homeChartCanvas';
+    //canvas.width = 400;
+    //canvas.height = 200;
+    document.getElementById('Home_Chart_Parent').appendChild(canvas);
+  
+    // Get the canvas context
+    var ctx = canvas.getContext('2d');
+  
+
+    
+    // Create the chart
+    var myChart = new Chart(ctx, {
+        type: 'bar',
+        data: data,
+        options: {
+            plugins: {
+                legend: {
+                    display: true
+                },
+                
+            },
+            scales: {
+                x: {
+                    stacked: true
+                },
+                y: {
+                    stacked: true,
+                    ticks: {
+                      beginAtZero: true,
+                  },
+                  min: 0,
+                  max: 41
+                }
+            },
+            responsive: true, // Allow chart to resize
+            maintainAspectRatio: false
+        }
+    });
+
+
+  
+    //canvas.style.margin = '0 auto';
+    //canvas.style.width = '100%';
+  }
+
+  function display_away_info(league){
+
+    var abb_array = [];
+    var wins_array = [];
+    var losses_array = [];
+   
+
+      for (var i = 0; i < league.length; i++) {
+        abb_array.push(league[i].label);
+        wins_array.push(league[i].wins);
+        losses_array.push(league[i].losses);
+    }
+
+    // var chartScript = document.createElement('script2');
+    // chartScript.src = '../chart.js';
+
+    var win_color_b = hexToRgba("#041E42",1.0);
+    var loss_color_b = hexToRgba("#FFB81C",1.0);
+
+    var win_color = hexToRgba("#041E42",0.7);
+    var loss_color = hexToRgba("#FFB81C",0.7);
+       var data = {
+        labels: abb_array,
+        datasets: [{
+            label: 'Wins',
+            data: wins_array,
+            backgroundColor: win_color,
+            borderColor: win_color_b,
+            borderWidth: 1
+        },
+        {
+            label: 'Losses',
+            data: losses_array,
+            backgroundColor: loss_color,
+            borderColor: loss_color_b,
+            borderWidth: 1
+        }]
+    };
+  
+
+      // Get the reference to the parent element
+      var parentElement = document.getElementById('Away_Chart_Parent');
+      // Check if there is an old canvas
+      var oldCanvas = document.getElementById('AwayRecordCanvas');
+      if (oldCanvas) {
+          // If old canvas exists, remove it
+          parentElement.removeChild(oldCanvas);
+      }
+
+    // Get the canvas element
+    var canvas = document.createElement('canvas');
+    canvas.id = 'AwayRecordCanvas';
+    //canvas.width = 400;
+    //canvas.height = 200;
+    document.getElementById('Away_Chart_Parent').appendChild(canvas);
+  
+    // Get the canvas context
+    var ctx = canvas.getContext('2d');
+  
+    // Create the chart
+    var myChart = new Chart(ctx, {
+        type: 'bar',
+        data: data,
+        options: {
+            plugins: {
+                legend: {
+                    display: true
+                },
+            },
+            scales: {
+                x: {
+                    stacked: true
+                },
+                y: {
+                    stacked: true,
+                    ticks: {
+                      beginAtZero: true,
+                  },
+                  min: 0,
+                  max: 41
+                }
+            },
+            responsive: true, // Allow chart to resize
+            maintainAspectRatio: false
+        }
+    });
+
+
+
+  }
+
+
+  function display_L10_info(league){
+
+    var abb_array = [];
+    var wins_array = [];
+    var losses_array = [];
+   
+
+      for (var i = 0; i < league.length; i++) {
+        abb_array.push(league[i].label);
+        wins_array.push(league[i].wins);
+        losses_array.push(league[i].losses);
+    }
+
+    // var chartScript = document.createElement('script2');
+    // chartScript.src = '../chart.js';
+
+    var win_color_b = hexToRgba("#041E42",1.0);
+    var loss_color_b = hexToRgba("#FFB81C",1.0);
+
+    var win_color = hexToRgba("#041E42",0.7);
+    var loss_color = hexToRgba("#FFB81C",0.7);
+       var data = {
+        labels: abb_array,
+        datasets: [{
+            label: 'Wins',
+            data: wins_array,
+            backgroundColor: win_color,
+            borderColor: win_color_b,
+            borderWidth: 1
+        },
+        {
+            label: 'Losses',
+            data: losses_array,
+            backgroundColor: loss_color,
+            borderColor: loss_color_b,
+            borderWidth: 1
+        }]
+    };
+  
+
+      // Get the reference to the parent element
+      var parentElement = document.getElementById('Last10_Chart_Parent');
+      // Check if there is an old canvas
+      var oldCanvas = document.getElementById('L10RecordCanvas');
+      if (oldCanvas) {
+          // If old canvas exists, remove it
+          parentElement.removeChild(oldCanvas);
+      }
+
+    // Get the canvas element
+    var canvas = document.createElement('canvas');
+    canvas.id = 'L10RecordCanvas';
+    //canvas.width = 400;
+    //canvas.height = 200;
+    document.getElementById('Last10_Chart_Parent').appendChild(canvas);
+  
+    // Get the canvas context
+    var ctx = canvas.getContext('2d');
+  
+    // Create the chart
+    var myChart = new Chart(ctx, {
+        type: 'bar',
+        data: data,
+        options: {
+            plugins: {
+                legend: {
+                    display: true
+                },
+            },
+            scales: {
+                x: {
+                    stacked: true
+                },
+                y: {
+                    stacked: true,
+                    ticks: {
+                      beginAtZero: true,
+                  },
+                  min: 0,
+                  max: 10
+                }
+            },
+            responsive: true, // Allow chart to resize
+            maintainAspectRatio: false
+        }
+    });
+
+
+
+  }
+
+  function populate_away_win_loss() {
+
+   
+  
+  }
+
+  function display_differ_info(league) {
+
+    var datasets = [];
+
+
+       for (var i = 0; i < league.length; i++) {
+
+       // console.log("Full Name:", full);
+        let dataset = {
+           label: league[i].common,
+           data: [{ x: league[i].x, y: league[i].y, r: league[i].z }],
+           backgroundColor: hexToRgba(getTeamColors(league[i].full).primary_color,1.0),
+           borderColor: hexToRgba(getTeamColors(league[i].full).secondary_color,1.0)
+       };
+   
+       // Output the values to the console
 // console.log("Label:", dataset.label);
 // console.log("Data:", dataset.data);
 // console.log("Background Color:", dataset.backgroundColor);
 // console.log("Border Color:", dataset.borderColor);
 
-        // Push the dataset object into the datasets array
-        datasets.push(dataset);
-         
-     }
-   }).catch(error => {
-     // Handle error here
-     console.error(error);
-   });
+       // Push the dataset object into the datasets array
+       datasets.push(dataset);
+        
+    }
 
-//var dataS = [];
+    //var dataS = [];
 
 // for (let i = 0; i < commonName.length; i++) {
 //     // const label = commonName[i];
@@ -663,48 +861,89 @@ function populate_differ_chart() {
 //     // dataS.push(new BubbleSet(label, data, backgroundColor, borderColor));
 // }
 
-var divHolder = document.getElementById('differ_wins_losses_chart');
-divHolder.style.width = '100%';
-var ctx = document.getElementById('differ_wins_losses_chart').getContext('2d');
+   // Get the reference to the parent element
+   var parentElement = document.getElementById('Differ_Chart_Parent');
+   // Check if there is an old canvas
+   var oldCanvas = document.getElementById('DifferCanvas');
+   if (oldCanvas) {
+       // If old canvas exists, remove it
+       parentElement.removeChild(oldCanvas);
+   }
 
+ // Get the canvas element
+ var canvas = document.createElement('canvas');
+ canvas.id = 'DifferCanvas';
+ //canvas.width = 400;
+ //canvas.height = 200;
+ document.getElementById('Differ_Chart_Parent').appendChild(canvas);
+
+ // Get the canvas context
+ var ctx = canvas.getContext('2d');
 var data = {
-    datasets: datasets
+   datasets: datasets
 };
 
 var options = {
-    plugins: {
-        legend: {
-            display: false
-        },
-    },
-    scales: {
-        x: {
-             grace: '10%'
-        
-        },
-        y: {
-        
+   plugins: {
+       legend: {
+           display: false
+       },
+       tooltip: {
+        callbacks: {
+          label: function(context) {
+            console.log(context);
+              var label = context.dataset.label;
+
+              label += " Y GPG: " + String(context.dataset.data[0].y);
+
+              label += " X Goal Diff: " + String(context.dataset.data[0].x);
+
+              return label;
+          }
+      }
+    }
+   },
+   scales: {
+       x: {
             grace: '10%'
-            
-        }
-    },
-    responsive: true, // Allow chart to resize
-    maintainAspectRatio: false
+       
+       },
+       y: {
+       
+           grace: '10%'
+           
+       }
+   },
+   responsive: true, // Allow chart to resize
+   maintainAspectRatio: false
 };
 
 var bubbleChart = new Chart(ctx, {
-    type: 'bubble',
-    data: data,
-    options: options
+   type: 'bubble',
+   data: data,
+   options: options
 });
+
+ 
+
+  }
+
+  function generatePrimaryTeamColors(teamName) {
+    var colors = [];
+    for (var i = 0; i < teamName.length; i++) {
+        var rgbaColor = hexToRgba(getTeamColors(teamName[i]).primary_color,1.0);
+        colors.push(rgbaColor);
     }
-      
-  
-    document.addEventListener("DOMContentLoaded", createStandingsTable);
-    document.addEventListener("DOMContentLoaded", populate_league_win_loss);
-    document.addEventListener("DOMContentLoaded", populate_home_win_loss);
-    document.addEventListener("DOMContentLoaded", populate_away_win_loss);
-    document.addEventListener("DOMContentLoaded", populate_differ_chart);
-    document.addEventListener("DOMContentLoaded", chartTitles);
-    
-    
+    console.log(colors);
+    return colors;
+}
+
+function generateSecondaryTeamColors(teamName) {
+  var colors = [];
+  for (var i = 0; i < teamName.length; i++) {
+      var rgbaColor = hexToRgba(getTeamColors(teamName[i]).secondary_color,0.5);
+      colors.push(rgbaColor);
+  }
+  console.log(colors);
+  return colors;
+}

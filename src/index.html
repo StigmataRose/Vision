@@ -12,24 +12,23 @@
 
 <div id="menu">
     <ul>
-      <li onclick="showIframe('home')">Home</li>
-        <li onclick="showIframe('schedule')">Schedule</li>
-        <li onclick="showIframe('standings')">Standings</li>
-        <li onclick="showIframe('leaders')">League Leaders</li>
-        <li onclick="showIframe('pp100')">Advanced</li>
-        <li onclick="showIframe('depths')">Rosters</li>
+      <li onclick="showIframe('board')">Board</li>
+      <li onclick="showIframe('standings')">Standings</li>
+      <li onclick="showIframe('leaders')">League Leaders</li>
+      <li onclick="showIframe('skaters')">Skaters</li>
+      <li onclick="showIframe('goalie')">Goalie</li>
+      
     </ul>
 </div>
 
 <div id="menu-toggle" onclick="toggleMenu()">&#9776; <strong>Menu</strong></div>
 
-<iframe id="home" class="iframeID" src="views/home.html"></iframe>
-
-<iframe id="schedule"class ="iframeID" src="views/schedule.html"></iframe>
+<iframe id="board" class="iframeID" src="views/board.html"></iframe>
 <iframe id="standings" class="iframeID" src="views/standings.html"></iframe>
 <iframe id="leaders" class="iframeID" src="views/leagueleaders.html"></iframe>
-<iframe id="pp100" class="iframeID" src="views/pp100.html"></iframe>
-<iframe id="depths" class="iframeID" src="views/team_rosters.html"></iframe>
+<iframe id="skaters" class="iframeID" src="views/team_rosters.html"></iframe>
+<iframe id="goalie"class ="iframeID" src="views/goalie.html"></iframe>
+
 
 
 <script>
@@ -46,11 +45,14 @@
          iframe.style.display = 'none';
       }
       });
-
+      iframeToShow.src = iframeToShow.src;
     iframeToShow.style.display = 'block';
     setTimeout(function () {
         iframeToShow.style.opacity = 1; // Fade in
       }, 50);
+
+      // var iframeWindow = iframeToShow.contentWindow;
+      // iframeWindow.loadCall();
   }
 </script>
 
@@ -73,7 +75,7 @@
   // });
 
  document.addEventListener('DOMContentLoaded', function() {
- var id = 'depths';
+ var id = 'board';
  var iframes = document.querySelectorAll('.iframeID');
  var iframeToShow = document.getElementById(id);
 
