@@ -2,7 +2,7 @@
 ### Example Images
 
 <p align="left">
-  <em>Image 1: Title of Image 1</em>
+  <em>Homepage: Desktop Style Drag and Drop</em>
   <br />
   <img src="./example/image1.png" alt="Image 1" width="200" />
 </p>
